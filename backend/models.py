@@ -1,3 +1,6 @@
+import json
+from backend import database
+
 from sqlalchemy import Table, Column, Integer, MetaData, ForeignKey, String, Date, Boolean, Text, JSON
 from sqlalchemy.orm import DeclarativeBase, relationship, backref
 
@@ -7,27 +10,34 @@ class Base(DeclarativeBase):
 
 
 relations = Table('relations', Base.metadata,
-                  Column('boss_id', Integer, ForeignKey('person.id'), primary_key=True),
-                  Column('employee_id', Integer, ForeignKey('person.id'), primary_key=True))
+                  Column('boss_id', Integer, ForeignKey('person.id', ondelete='CASCADE'), primary_key=True),
+                  Column('employee_id', Integer, ForeignKey('person.id', ondelete='CASCADE'), primary_key=True))
 
 person_project = Table('person_project', Base.metadata,
-                       Column('person_id', Integer, ForeignKey('person.id'), primary_key=True),
-                       Column('project_id', Integer, ForeignKey('project.id'), primary_key=True))
+                       Column('person_id', Integer, ForeignKey('person.id', ondelete='CASCADE'), primary_key=True),
+                       Column('project_id', Integer, ForeignKey('project.id', ondelete='CASCADE'), primary_key=True))
 
 repository_project = Table('repository_project', Base.metadata,
-                           Column('repository_id', Integer, ForeignKey('repository.id'), primary_key=True),
-                           Column('project_id', Integer, ForeignKey('project.id'), primary_key=True))
+                           Column('repository_id', Integer, ForeignKey('repository.id', ondelete='CASCADE'), primary_key=True),
+                           Column('project_id', Integer, ForeignKey('project.id', ondelete='CASCADE'), primary_key=True))
 
 project_subdepartment = Table('project_subdepartment', Base.metadata,
-                              Column('project_id', Integer, ForeignKey('project.id'), primary_key=True),
-                              Column('subdepartment_id', Integer, ForeignKey('subdepartment.id'),
+                              Column('project_id', Integer, ForeignKey('project.id', ondelete='CASCADE'),
+                                     primary_key=True),
+                              Column('subdepartment_id', Integer, ForeignKey('subdepartment.id', ondelete='CASCADE'),
                                      primary_key=True))
 
 subdepartment_department = Table('subdepartment_department', Base.metadata,
-                                 Column('subdepartment_id', Integer, ForeignKey('subdepartment.id'),
+                                 Column('subdepartment_id', Integer, ForeignKey('subdepartment.id', ondelete='CASCADE'),
                                         primary_key=True),
-                                 Column('department_id', Integer, ForeignKey('department.id'),
+                                 Column('department_id', Integer, ForeignKey('department.id', ondelete='CASCADE'),
                                         primary_key=True))
+
+
+def get_person_settings(self):
+    attrs = ('name', 'surname', 'email', 'position', 'patronymic', 'birth_date', 'gender', 'summary', 'phone',
+             'city', 'employment_date', 'telegram', 'notification_lang', 'about', 'graph')
+    return json.dumps(dict(zip(attrs, [True] * len(attrs))))
 
 
 class Person(Base):
@@ -35,7 +45,7 @@ class Person(Base):
     id = Column(Integer(), primary_key=True)
     name = Column(String(200), nullable=False)
     surname = Column(String(200), nullable=True)  # nullable=False)
-    email = Column(String(200), nullable=True)  # nullable=False)
+    email = Column(String(200), nullable=False, unique=True)  # nullable=False)
     position = Column(String(200), nullable=True)
     patronymic = Column(String(200), nullable=True)  # nullable=False)
     birth_date = Column(Date(), nullable=True)  # nullable=False)
@@ -47,7 +57,7 @@ class Person(Base):
     telegram = Column(String(200), nullable=True)
     notification_lang = Column(String(200), nullable=True)
     about = Column(Text(), nullable=True)
-    settings = Column(JSON(), nullable=False)
+    settings = Column(JSON(), nullable=False, default=get_person_settings)
     bosses = relationship('Person', secondary=relations, lazy='select', primaryjoin=relations.c.employee_id == id,
                           secondaryjoin=relations.c.boss_id == id)
     employees = relationship('Person', secondary=relations, lazy='select', primaryjoin=relations.c.boss_id == id,
@@ -93,3 +103,10 @@ class Department(Base):
     __tablename__ = 'department'
     id = Column(Integer(), primary_key=True)
     name = Column(String(200), nullable=False)
+
+
+if __name__ == '__main__':
+    session = database.SessionLocal()
+    session.add_all((Person(name='C', email='c@example.com'), Person(name='D', email='d@example.com')))
+    session.commit()
+
