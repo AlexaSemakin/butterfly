@@ -55,8 +55,43 @@ class RepositoryBase(BaseModel):
     name: Optional[str]
     url: Optional[str]
 
+
 class RepositoryCreate(RepositoryBase):
     pass
 
+
 class Repository(RepositoryBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ProjectBase(BaseModel):
+    name: str
+
+
+class ProjectCreate(ProjectBase):
+    pass
+
+
+class Project(ProjectBase):
+    id: int
+    
+    class Config:
+        orm_mode = True
+        
+
+class SubdepartmentBase(BaseModel):
+    name: str
+
+
+class SubdepartmentCreate(SubdepartmentBase):
+    pass
+
+
+class Subdepartment(SubdepartmentBase):
+    id: int
+    
+    class Config:
+        orm_mode = True
