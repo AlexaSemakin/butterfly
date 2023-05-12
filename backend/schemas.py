@@ -68,7 +68,7 @@ class Repository(RepositoryBase):
 
 
 class ProjectBase(BaseModel):
-    name: str
+    name: Optional[str]
 
 
 class ProjectCreate(ProjectBase):
@@ -83,7 +83,7 @@ class Project(ProjectBase):
         
 
 class SubdepartmentBase(BaseModel):
-    name: str
+    name: Optional[str]
 
 
 class SubdepartmentCreate(SubdepartmentBase):
@@ -93,5 +93,20 @@ class SubdepartmentCreate(SubdepartmentBase):
 class Subdepartment(SubdepartmentBase):
     id: int
     
+    class Config:
+        orm_mode = True
+
+
+class DepartmentBase(BaseModel):
+    name: Optional[str]
+
+
+class DepartmentCreate(DepartmentBase):
+    pass
+
+
+class Department(DepartmentBase):
+    id: int
+
     class Config:
         orm_mode = True
