@@ -50,3 +50,13 @@ class Person(PersonBase):
     class Config:
         orm_mode = True
 
+
+class RepositoryBase(BaseModel):
+    name: Optional[str]
+    url: Optional[str]
+
+class RepositoryCreate(RepositoryBase):
+    pass
+
+class Repository(RepositoryBase):
+    id: int
