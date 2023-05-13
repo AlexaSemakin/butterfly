@@ -1,7 +1,9 @@
 from typing import Annotated
 
 from fastapi import FastAPI, Depends
+from sqlalchemy import insert
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from backend.database import get_session
 from backend import models
@@ -88,3 +90,92 @@ def create_department(session: Annotated[Session, Depends(get_session)], new_dep
     session.commit()
     session.refresh(new_department)
     return new_department
+
+
+@app.post('/relations')
+def create_relation(session: Annotated[Session, Depends(get_session)], new_relation: schemas.Relation):
+    try:
+        session.execute(models.relations.insert().values(**new_relation.dict()))
+        session.commit()
+    except IntegrityError:
+        print('Already exists')
+    return {'message': 'created'}
+
+
+@app.post('/relations/delete')
+def delete_relation(session: Annotated[Session, Depends(get_session)], relation: schemas.Relation):
+    session.execute(models.relations.delete().values(**relation.dict()))
+    session.commit()
+    return {'message': 'deleted'}
+
+
+@app.post('/personProject')
+def create_person_project(session: Annotated[Session, Depends(get_session)], new_person_project: schemas.PersonProject):
+    try:
+        session.execute(models.person_project.insert().values(**new_person_project.dict()))
+        session.commit()
+    except IntegrityError:
+        print('Already exists')
+    return {'message': 'created'}
+
+
+@app.post('/personProject/delete')
+def delete_person_project(session: Annotated[Session, Depends(get_session)], person_project: schemas.PersonProject):
+    person_project = models.person_project(**person_project.dict())
+    session.delete(person_project)
+    session.commit()
+    return {'message': 'deleted'}
+
+
+@app.post('/repositoryProject')
+def create_repository_project(session: Annotated[Session, Depends(get_session)], new_repository_project: schemas.RepositoryProject):
+    try:
+        session.execute(models.repository_project.insert().values(**new_repository_project.dict()))
+        session.commit()
+    except IntegrityError:
+        print('Already exists')
+    return {'message': 'created'}
+
+
+@app.post('/repositoryProject/delete')
+def delete_repository_project(session: Annotated[Session, Depends(get_session)], repository_project: schemas.RepositoryProject):
+    repository_project = models.repository_project(**repository_project.dict())
+    session.delete(repository_project)
+    session.commit()
+    return {'message': 'deleted'}
+
+
+@app.post('/projectSubdepartment')
+def create_project_subdepartment(session: Annotated[Session, Depends(get_session)], new_project_subdepartment: schemas.ProjectSubdepartment):
+    try:
+        session.execute(models.project_subdepartment.insert().values(**new_project_subdepartment.dict()))
+        session.commit()
+    except IntegrityError:
+        print('Already exists')
+    return {'message': 'created'}
+
+
+@app.post('/projectSubdepartment/delete')
+def delete_project_subdepartment(session: Annotated[Session, Depends(get_session)], project_subdepartment: schemas.ProjectSubdepartment):
+    project_subdepartment = models.project_subdepartment(**project_subdepartment.dict())
+    session.delete(project_subdepartment)
+    session.commit()
+    return {'message': 'deleted'}
+
+
+@app.post('/subdepartmentDepartment')
+def create_subdepartment_department(session: Annotated[Session, Depends(get_session)], new_subdepartment_department: schemas.SubdepartmentDepartment):
+    try:
+        session.execute(models.subdepartment_department.insert().values(**new_subdepartment_department.dict()))
+        session.commit()
+    except IntegrityError:
+        print('Already exists')
+    return {'message': 'created'}
+
+
+@app.post('/subdepartmentDepartment/delete')
+def delete_subdepartment_department(session: Annotated[Session, Depends(get_session)], subdepartment_department: schemas.SubdepartmentDepartment):
+    subdepartment_department = models.subdepartment_department(**subdepartment_department.dict())
+    session.delete(subdepartment_department)
+    session.commit()
+    return {'message': 'deleted'}

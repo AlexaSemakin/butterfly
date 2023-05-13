@@ -1,3 +1,4 @@
+import typing
 from typing import Optional, List
 from datetime import date
 
@@ -20,6 +21,21 @@ class Settings(BaseModel):
     notification_lang: Optional[bool]
     about: Optional[bool]
     graph: Optional[bool]
+
+
+class ProjectBase(BaseModel):
+    name: Optional[str]
+
+
+class ProjectCreate(ProjectBase):
+    pass
+
+
+class Project(ProjectBase):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 
 class PersonBase(BaseModel):
@@ -46,6 +62,7 @@ class PersonCreate(PersonBase):
 
 class Person(PersonBase):
     id: int
+    projects: typing.List['Project']
 
     class Config:
         orm_mode = True
@@ -63,21 +80,6 @@ class RepositoryCreate(RepositoryBase):
 class Repository(RepositoryBase):
     id: int
 
-    class Config:
-        orm_mode = True
-
-
-class ProjectBase(BaseModel):
-    name: Optional[str]
-
-
-class ProjectCreate(ProjectBase):
-    pass
-
-
-class Project(ProjectBase):
-    id: int
-    
     class Config:
         orm_mode = True
         
@@ -107,6 +109,46 @@ class DepartmentCreate(DepartmentBase):
 
 class Department(DepartmentBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+
+class Relation(BaseModel):
+    boss_id: int
+    employee_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class PersonProject(BaseModel):
+    person_id: int
+    project_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class RepositoryProject(BaseModel):
+    repository_id: int
+    project_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ProjectSubdepartment(BaseModel):
+    project_id: int
+    subdepartment_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class SubdepartmentDepartment(BaseModel):
+    subdepartment_id: int
+    department_id: int
 
     class Config:
         orm_mode = True
