@@ -1,17 +1,6 @@
 let active_page = "";
 let show_search_bar = true;
 const search_bar = document.querySelector('.menu');
-changeArticle("graph");
-
-// document.querySelectorAll(".nav_button").forEach(el => {
-// 	el.addEventListener("click", function () {
-// 		if (this.id !== "chat.html" && show_search_bar === false) {
-// 			show_search_bar = true;
-// 			search_bar.style.display = "block"
-// 		}
-// 		changeArticle(this.id);
-// 	});
-// });
 
 function add_search_bar() {
 	if (show_search_bar == false) {
@@ -48,6 +37,7 @@ async function to_profile() {
 		active_page = profileId;
 		await go_to_page(profileId + "/" + profileId + ".html");
 		active_nav(active_page);
+		settingsGet();
 	}
 }
 
@@ -129,6 +119,7 @@ async function load_graph() {
 	active_nav(active_page);
 }
 
+// draw graph
 function start() {
 	changeArticle("graph");
 	//JavaScript
@@ -253,7 +244,7 @@ function start() {
 // }
 
 
-// 
+// draw project
 const drawProject = () => anychart.onDocumentReady(function () {
 	// adding data  
 	let data = [
@@ -394,12 +385,13 @@ const drawProject = () => anychart.onDocumentReady(function () {
 		},
 
 	];
+
 	// creating a venn diagram with the data
 	let chart = anychart.venn(data);
 	// setting the labels  
 	chart
-	  .labels()
-	  .fontSize(14)
+		.labels()
+		.fontSize(14)
 		.fontColor("#000")
 		.hAlign("center")
 		.vAlign("center")
@@ -411,12 +403,11 @@ const drawProject = () => anychart.onDocumentReady(function () {
 		.fontColor("#000")
 		.format("");
 	// setting the title
-	chart 
+	chart
 		.title()
 		.enabled(false)
 		.useHtml(false);
-
-		chart.legend(false);
+	chart.legend(false);
 	// improving the tooltip
 	chart.tooltip().format(""); chart.tooltip().separator(false);
 	// setting the container id
@@ -424,3 +415,58 @@ const drawProject = () => anychart.onDocumentReady(function () {
 	// drawing the diagram  
 	chart.draw();
 });
+
+
+
+
+// set settings 
+const generateHtml = (obj, title_text) => {
+	let htmlText = "";
+	let checkIt = "";
+	for (let index = 0; index < obj.length; index++) {
+		if (obj[index][1]) {
+			checkIt = "checked";
+		} else checkIt = "";
+
+		htmlText += `
+			<div id="setting_${obj[index][0]}" class="switch_setting">
+			<div id="notice_${obj[index][0]}__text">
+				<div id="notice_${obj[index][0]}__title">${title_text[index]}</div>
+				<div id="notice_${obj[index][0]}__description">
+					
+				</div>
+			</div>
+			<div id="notice_${obj[index][0]}__input">
+				<label class="switch">
+					<input type="checkbox" ${checkIt}/>
+					<span class="slider round"></span>
+				</label>
+			</div>
+			</div>
+		`
+	}
+	document.getElementById("noti_blocks").innerHTML = htmlText;
+}
+const settingsGet = () => {
+	const title_text = ["Имя", "Фамилия", "Почта", "Должность", "Отчество",
+		"Дата", "Пол", "Резюме", "Телефон", "Город", "Дата приема на работу", "Телеграм", "Язык уведолении", "О человеке", "Граф"];
+	const someJson = {
+		"name": true,
+		"surname": false,
+		"email": true,
+		"post": true,
+		"patronymic": true,
+		"birth_date": false,
+		"gender": true,
+		"summary": false,
+		"phone": true,
+		"city": true,
+		"employment_date": false,
+		"telegram": true,
+		"notification_lang": true,
+		"about": true,
+		"graph": true
+	}
+	const jsonEntries = Object.entries(someJson);
+	generateHtml(jsonEntries, title_text);
+}

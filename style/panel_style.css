@@ -188,7 +188,7 @@ i {
 	border-radius: 5px;
 }
 
-#user_profile {
+.user_profile {
 	display: flex;
 	align-items: center;
 	cursor: pointer;
@@ -462,4 +462,21 @@ i {
 	height: 100vh;
 	background: rgba(0, 0, 0, 0);
 	z-index: 5500;
+}
+
+.orgchart .node {
+    background-color: orange;
+}
+
+.right_block_style{
+    box-shadow: none;
+}
+[data-filter-close].close{
+    display: none;
+}
+
+[data-filter-field]{
+    background-color: white;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
 }

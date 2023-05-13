@@ -222,24 +222,3 @@ input:checked+.slider:before {
 	flex-direction: column;
 	gap: 16px;
 }
-
-.boc-light {
-	background-color: #f2f4f8;
-}
-
-.orgchart .node {
-    background-color: orange;
-}
-
-.right_block_style{
-    box-shadow: none;
-}
-[data-filter-close].close{
-    display: none;
-}
-
-[data-filter-field]{
-    background-color: white;
-    border: 1px solid #aaaaaa;
-    border-radius: 4px;
-}
