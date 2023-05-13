@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import FastAPI, Depends
 from sqlalchemy import insert
@@ -29,6 +29,24 @@ def get_person_subdepartments(session: Session, person_id: int):
         .filter(models.Person.id == person_id) \
         .all()
     return result
+
+
+@app.get('/persons', response_model=List[schemas.Person])
+def get_persons(session: Annotated[Session, Depends(get_session)]):
+    persons_db = session.query(models.Person).all()
+    persons_out = list()
+    for person_db in persons_db:
+        person = schemas.Person.from_orm(person_db)
+        bosses = person.bosses
+        employees = person.employees
+        person = schemas.Person.from_orm(person)
+        person.departments = get_person_departments(session, person.id)
+        person.subdepartments = get_person_subdepartments(session, person.id)
+        person.boss_emails = list([i.email for i in bosses])
+        person.employee_emails = list([i.email for i in employees])
+        persons_out.append(person)
+    
+    return persons_out
 
 
 @app.get('/persons/{person_email}')
