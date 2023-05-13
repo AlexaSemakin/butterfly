@@ -9,7 +9,7 @@ class Settings(BaseModel):
     name: Optional[bool]
     surname: Optional[bool]
     email: Optional[bool]
-    position: Optional[bool]
+    post: Optional[bool]
     patronymic: Optional[bool]
     birth_date: Optional[bool]
     gender: Optional[bool]
@@ -128,7 +128,7 @@ class PersonBase(BaseModel):
     name: Optional[str]
     surname: Optional[str]
     email: EmailStr
-    position: Optional[str]
+    post: Optional[str]
     patronymic: Optional[str]
     birth_date: Optional[date]
     gender: Optional[bool]
@@ -139,14 +139,13 @@ class PersonBase(BaseModel):
     telegram: Optional[str]
     notification_lang: Optional[str]
     about: Optional[str]
-    settings: Optional[Settings]
 
 
 class PersonCreate(PersonBase):
     pass
 
 
-class Person(PersonBase):
+class PersonDetail(PersonBase):
     id: int
     projects: typing.List[Project]
     departments: Optional[typing.List[Department]]
@@ -155,6 +154,19 @@ class Person(PersonBase):
     # employees = Optional[List]
     boss_emails: Optional[typing.List[EmailStr]]
     employee_emails: Optional[typing.List[EmailStr]]
+    settings: Optional[Settings]
+
+    class Config:
+        orm_mode = True
+
+
+class Person(PersonBase):
+    id: int
+    project: Optional[Project]
+    department: Optional[Department]
+    subdepartment: Optional[Subdepartment]
+    boss_email: Optional[EmailStr]
+    employee_email: Optional[EmailStr]
 
     class Config:
         orm_mode = True

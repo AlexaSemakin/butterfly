@@ -39,12 +39,31 @@ def get_persons(session: Annotated[Session, Depends(get_session)]):
         person = schemas.Person.from_orm(person_db)
         bosses = person_db.bosses
         employees = person_db.employees
+        departments = get_person_departments(session, person.id)
+        subdepartments = get_person_subdepartments(session, person.id)
+        person.department = departments[0] if len(departments) != 0 else None
+        person.subdepartment = subdepartments[0] if len(subdepartments) != 0 else None
+        person.boss_email = bosses[0].email if len(bosses) != 0 else None
+        person.employee_email = employees[0].email if len(employees) != 0 else None
+        persons_out.append(person)
+    
+    return persons_out
+
+
+@app.get('/personsDetail', response_model=List[schemas.PersonDetail])
+def get_persons(session: Annotated[Session, Depends(get_session)]):
+    persons_db = session.query(models.Person).all()
+    persons_out = list()
+    for person_db in persons_db:
+        person = schemas.PersonDetail.from_orm(person_db)
+        bosses = person_db.bosses
+        employees = person_db.employees
         person.departments = get_person_departments(session, person.id)
         person.subdepartments = get_person_subdepartments(session, person.id)
         person.boss_emails = list([i.email for i in bosses])
         person.employee_emails = list([i.email for i in employees])
         persons_out.append(person)
-    
+
     return persons_out
 
 
@@ -53,7 +72,7 @@ def get_person(session: Annotated[Session, Depends(get_session)], person_email: 
     person = session.query(models.Person).filter(models.Person.email == person_email).first()
     bosses = person.bosses
     employees = person.employees
-    person = schemas.Person.from_orm(person)
+    person = schemas.PersonDetail.from_orm(person)
     person.departments = get_person_departments(session, person.id)
     person.subdepartments = get_person_subdepartments(session, person.id)
     person.boss_emails = list([i.email for i in bosses])
@@ -224,3 +243,12 @@ def delete_subdepartment_department(session: Annotated[Session, Depends(get_sess
     session.execute(models.subdepartment_department.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
+
+
+@app.get('/search/{q}')
+def search(session: Annotated[Session, Depends(get_session)], q: str):
+    classes = (models.Person, models.Repository, models.Project, models.Subdepartment, models.Department)
+    result = []
+    for c in classes:
+        result += models.search(c, q)
+    return [dict(zip(('name', 'column', 'object'), i)) for i in result]

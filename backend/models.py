@@ -5,6 +5,17 @@ from sqlalchemy import Table, Column, Integer, MetaData, ForeignKey, String, Dat
 from sqlalchemy.orm import DeclarativeBase, relationship, backref
 
 
+def search(model_class, substring):
+    s = database.SessionLocal()
+    result = []
+    for obj in s.query(model_class):
+        for column in obj.__table__.columns.keys():
+            if substring in str(getattr(obj, column)):
+                result.append((model_class.__tablename__, column, obj))
+                break
+    return result
+
+
 class Base(DeclarativeBase):
     pass
 
@@ -35,7 +46,7 @@ subdepartment_department = Table('subdepartment_department', Base.metadata,
 
 
 def get_person_settings(self):
-    attrs = ('name', 'surname', 'email', 'position', 'patronymic', 'birth_date', 'gender', 'summary', 'phone',
+    attrs = ('name', 'surname', 'email', 'post', 'patronymic', 'birth_date', 'gender', 'summary', 'phone',
              'city', 'employment_date', 'telegram', 'notification_lang', 'about', 'graph')
     return json.dumps(dict(zip(attrs, [True] * len(attrs))))
 
@@ -46,7 +57,7 @@ class Person(Base):
     name = Column(String(200), nullable=False)
     surname = Column(String(200), nullable=True)  # nullable=False)
     email = Column(String(200), nullable=False, unique=True)  # nullable=False)
-    position = Column(String(200), nullable=True)
+    post = Column(String(200), nullable=True)
     patronymic = Column(String(200), nullable=True)  # nullable=False)
     birth_date = Column(Date(), nullable=True)  # nullable=False)
     gender = Column(Boolean(), nullable=True)  # nullable=False)  # 0 - female, 1 - male
@@ -68,10 +79,6 @@ class Person(Base):
     def __init__(self, name, **kw):
         super().__init__(**kw)
         self.name = name
-
-    def has_str(self, s):
-        # TODO: code...
-        pass
 
 
 class Repository(Base):
