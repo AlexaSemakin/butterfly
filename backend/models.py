@@ -48,7 +48,7 @@ subdepartment_department = Table('subdepartment_department', Base.metadata,
 def get_person_settings(self):
     attrs = ('name', 'surname', 'email', 'post', 'patronymic', 'birth_date', 'gender', 'summary', 'phone',
              'city', 'employment_date', 'telegram', 'notification_lang', 'about', 'graph')
-    return json.dumps(dict(zip(attrs, [True] * len(attrs))))
+    return dict(zip(attrs, [True] * len(attrs)))
 
 
 class Person(Base):

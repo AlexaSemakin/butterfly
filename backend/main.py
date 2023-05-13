@@ -1,3 +1,4 @@
+import json
 from typing import Annotated, List
 
 from fastapi import FastAPI, Depends
@@ -48,7 +49,7 @@ def get_persons(session: Annotated[Session, Depends(get_session)]):
         person.boss_email = bosses[0].email if len(bosses) != 0 else None
         person.employee_email = employees[0].email if len(employees) != 0 else None
         persons_out.append(person)
-    
+
     return persons_out
 
 
@@ -69,7 +70,7 @@ def get_persons(session: Annotated[Session, Depends(get_session)]):
     return persons_out
 
 
-@app.get('/persons/{person_email}')
+@app.get('/persons/{person_email}', response_model=schemas.PersonDetail)
 def get_person(session: Annotated[Session, Depends(get_session)], person_email: str):
     person = session.query(models.Person).filter(models.Person.email == person_email).first()
     bosses = person.bosses
