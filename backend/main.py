@@ -12,9 +12,36 @@ from backend import schemas
 app = FastAPI()
 
 
+def get_person_departments(session: Session, person_id: int):
+    result = session.query(models.Department)\
+        .join(models.Subdepartment, models.Department.subdepartments)\
+        .join(models.Project, models.Subdepartment.projects)\
+        .join(models.Person, models.Project.persons)\
+        .filter(models.Person.id == person_id)\
+        .all()
+    return result
+
+
+def get_person_subdepartments(session: Session, person_id: int):
+    result = session.query(models.Subdepartment) \
+        .join(models.Project, models.Subdepartment.projects) \
+        .join(models.Person, models.Project.persons) \
+        .filter(models.Person.id == person_id) \
+        .all()
+    return result
+
+
 @app.get('/persons/{person_email}')
 def get_person(session: Annotated[Session, Depends(get_session)], person_email: str):
-    return session.query(models.Person).filter(models.Person.email == person_email).first()
+    person = session.query(models.Person).filter(models.Person.email == person_email).first()
+    bosses = person.bosses
+    employees = person.employees
+    person = schemas.Person.from_orm(person)
+    person.departments = get_person_departments(session, person.id)
+    person.subdepartments = get_person_subdepartments(session, person.id)
+    person.boss_emails = list([i.email for i in bosses])
+    person.employee_emails = list([i.email for i in employees])
+    return person
 
 
 @app.post('/persons', response_model=schemas.Person)
@@ -104,7 +131,8 @@ def create_relation(session: Annotated[Session, Depends(get_session)], new_relat
 
 @app.post('/relations/delete')
 def delete_relation(session: Annotated[Session, Depends(get_session)], relation: schemas.Relation):
-    session.execute(models.relations.delete().values(**relation.dict()))
+    filters = [getattr(models.relations.c, name) == value for (name, value) in relation.dict().items()]
+    session.execute(models.relations.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
 
@@ -121,8 +149,8 @@ def create_person_project(session: Annotated[Session, Depends(get_session)], new
 
 @app.post('/personProject/delete')
 def delete_person_project(session: Annotated[Session, Depends(get_session)], person_project: schemas.PersonProject):
-    person_project = models.person_project(**person_project.dict())
-    session.delete(person_project)
+    filters = [getattr(models.person_project.c, name) == value for (name, value) in person_project.dict().items()]
+    session.execute(models.person_project.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
 
@@ -139,8 +167,8 @@ def create_repository_project(session: Annotated[Session, Depends(get_session)],
 
 @app.post('/repositoryProject/delete')
 def delete_repository_project(session: Annotated[Session, Depends(get_session)], repository_project: schemas.RepositoryProject):
-    repository_project = models.repository_project(**repository_project.dict())
-    session.delete(repository_project)
+    filters = [getattr(models.repository_project.c, name) == value for (name, value) in repository_project.dict().items()]
+    session.execute(models.repository_project.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
 
@@ -157,8 +185,8 @@ def create_project_subdepartment(session: Annotated[Session, Depends(get_session
 
 @app.post('/projectSubdepartment/delete')
 def delete_project_subdepartment(session: Annotated[Session, Depends(get_session)], project_subdepartment: schemas.ProjectSubdepartment):
-    project_subdepartment = models.project_subdepartment(**project_subdepartment.dict())
-    session.delete(project_subdepartment)
+    filters = [getattr(models.project_subdepartment.c, name) == value for (name, value) in project_subdepartment.dict().items()]
+    session.execute(models.project_subdepartment.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
 
@@ -175,7 +203,7 @@ def create_subdepartment_department(session: Annotated[Session, Depends(get_sess
 
 @app.post('/subdepartmentDepartment/delete')
 def delete_subdepartment_department(session: Annotated[Session, Depends(get_session)], subdepartment_department: schemas.SubdepartmentDepartment):
-    subdepartment_department = models.subdepartment_department(**subdepartment_department.dict())
-    session.delete(subdepartment_department)
+    filters = [getattr(models.subdepartment_department.c, name) == value for (name, value) in subdepartment_department.dict().items()]
+    session.execute(models.subdepartment_department.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}

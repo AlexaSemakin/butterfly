@@ -38,36 +38,6 @@ class Project(ProjectBase):
         orm_mode = True
 
 
-class PersonBase(BaseModel):
-    name: Optional[str]
-    surname: Optional[str]
-    email: EmailStr
-    position: Optional[str]
-    patronymic: Optional[str]
-    birth_date: Optional[date]
-    gender: Optional[bool]
-    summary: Optional[str]
-    phone: Optional[str]
-    city: Optional[str]
-    employment_date: Optional[date]
-    telegram: Optional[str]
-    notification_lang: Optional[str]
-    about: Optional[str]
-    settings: Optional[Settings]
-
-
-class PersonCreate(PersonBase):
-    pass
-
-
-class Person(PersonBase):
-    id: int
-    projects: typing.List['Project']
-
-    class Config:
-        orm_mode = True
-
-
 class RepositoryBase(BaseModel):
     name: Optional[str]
     url: Optional[str]
@@ -149,6 +119,42 @@ class ProjectSubdepartment(BaseModel):
 class SubdepartmentDepartment(BaseModel):
     subdepartment_id: int
     department_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class PersonBase(BaseModel):
+    name: Optional[str]
+    surname: Optional[str]
+    email: EmailStr
+    position: Optional[str]
+    patronymic: Optional[str]
+    birth_date: Optional[date]
+    gender: Optional[bool]
+    summary: Optional[str]
+    phone: Optional[str]
+    city: Optional[str]
+    employment_date: Optional[date]
+    telegram: Optional[str]
+    notification_lang: Optional[str]
+    about: Optional[str]
+    settings: Optional[Settings]
+
+
+class PersonCreate(PersonBase):
+    pass
+
+
+class Person(PersonBase):
+    id: int
+    projects: typing.List[Project]
+    departments: Optional[typing.List[Department]]
+    subdepartments: Optional[typing.List[Subdepartment]]
+    # bosses = Optional[List]
+    # employees = Optional[List]
+    boss_emails: Optional[typing.List[EmailStr]]
+    employee_emails: Optional[typing.List[EmailStr]]
 
     class Config:
         orm_mode = True

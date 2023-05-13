@@ -59,9 +59,9 @@ class Person(Base):
     about = Column(Text(), nullable=True)
     settings = Column(JSON(), nullable=False, default=get_person_settings)
     bosses = relationship('Person', secondary=relations, lazy='select', primaryjoin=relations.c.employee_id == id,
-                          secondaryjoin=relations.c.boss_id == id)
+                          secondaryjoin=relations.c.boss_id == id, back_populates='employees')
     employees = relationship('Person', secondary=relations, lazy='select', primaryjoin=relations.c.boss_id == id,
-                             secondaryjoin=relations.c.employee_id == id)
+                             secondaryjoin=relations.c.employee_id == id, back_populates='bosses')
     projects = relationship('Project', secondary=person_project, lazy='select',
                             backref=backref('persons', lazy='select'))
 
