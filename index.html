@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=divice-width, initial-scale=1.0" />
+	<title>auth</title>
+	<link href="style/style.css" rel="stylesheet" type="text/css" />
+	<script src="logic.js"></script>
+</head>
+
+<body>
+	<div id="auth">
+		<div id="auth_block">
+			<div id="auth__title">
+				<h1>Авторизация</h1>
+			</div>
+			<div id="auth__inputs">
+				<div id="auth__inputs_login">
+					<div id="auth__inputs_login__title" class="text">Логин</div>
+					<div id="auth__inputs_login_input">
+						<input type="text" class="input_value" />
+					</div>
+				</div>
+				<div id="auth__inputs_pas">
+					<div id="auth__inputs_pas__title" class="text">Пароль</div>
+					<div id="auth__inputs_pas_input">
+						<input type="password" class="input_value" />
+					</div>
+				</div>
+				<div id="auth__inputs_save_forgot">
+					<div id="auth_input_save">
+						<input class="text" type="checkbox" /> Запомнить меня
+					</div>
+					<div id="auth_input_forgot">
+						<a href="" class="text">Забыли пароль?</a>
+					</div>
+				</div>
+			</div>
+			<div id="auth__signin">
+				<a href="/page.html">
+					<input type="button" class="auth__signin_input_button" value="Войти" class="button" />
+				</a>
+			</div>
+			<div id="auth__help">
+				<div id="auth__help_title">Или войти с помощью:</div>
+				<div id="auth__help_buttons">
+					<div id="auth__ya" class="auth__help_button">
+						<div id="auth_ya_ico" class="image_block"></div>
+						<div id="auth__ya_tex">Яндекс</div>
+					</div>
+					<div id="auth__vk" class="auth__help_button">
+						<div id="auth_vk_ico" class="image_block"></div>
+						<div id="auth__vk_tex">ВКонтакте</div>
+					</div>
+					<div id="auth__google" class="auth__help_button">
+						<div id="auth_google_ico" class="image_block"></div>
+						<div id="auth__google_tex">Google</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="style/panel_style.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="style/settings_style.css" type="text/css">
+	<link rel="stylesheet" href="style/chat_style.css">
+	<link rel="stylesheet" href="style/adress-book.css">
+	<link rel="stylesheet" href="style/project_style.css">
+	<meta name="theme-color" content="#fff" />
+	<title>case #1</title>
+
+	<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js"></script>
+	<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-venn.min.js"></script>
+
+	<script src="https://balkan.app/js/OrgChart.js"></script>
+	<script src="https://kit.fontawesome.com/4b9fdd072c.js" crossorigin="anonymous"></script>
+	<script src="/js/adress-book.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/codex.editor.header@2.1.0/dist/bundle.js"></script> -->
+	<!-- <script src="js/setting.js"></script> -->
+
+</head>
+
+<body onload="start()">
+
+	<navigate>
+		<div id="user_profile" onclick="to_profile()">
+			<div class="user_profile__image"></div>
+			<div id="user_profile__info">
+				<div id="user_profile__info__name">Иван Иваныч</div>
+				<div id="user_profile__info__role">Админ</div>
+			</div>
+		</div>
+		<div id="nav">
+			<a>
+				<div class="nav_button active_nav_button__image" id="graph" onclick="to_graph()">
+					<i class="fa-solid fa-circle-nodes fa-xl"></i>
+					Структура
+				</div>
+			</a>
+			<a>
+				<div class="nav_button" id="graph-project-viev" onclick="to_project()">
+					<i class="fa-solid fa-diagram-project"></i>
+					Структура
+				</div>
+			</a>
+			<a>
+				<div class="nav_button" id="adress-book" onclick="to_adress_book()">
+					<i class="fa-regular fa-address-book fa-xl"></i>
+					Адресная книга
+				</div>
+			</a>
+			<a>
+				<div class="nav_button" id="chat" onclick="to_chat()">
+					<i class="fa-brands fa-rocketchat fa-xl"></i>
+					Чаты
+				</div>
+			</a>
+		</div>
+	</navigate>
+
+	<menu class="menu">
+		<div id="menu__elements">
+			<input type="text" class="input_white" id="input_search" placeholder="Поиск..." />
+		</div>
+	</menu>
+
+	<article></article>
+</body>
+<script src="js/logic.js"></script>
+
+</html>

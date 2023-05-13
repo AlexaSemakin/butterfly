@@ -1,0 +1,159 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+html,
+body {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #21272a;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#logo {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 40px;
+  left: 80px;
+  gap: 20px;
+}
+#logo__text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+#auth {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80px 160px;
+}
+
+h1 {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 110%;
+  /* or 46px */
+  text-align: center;
+}
+
+.text {
+  margin: 0px;
+  padding: 0px;
+  font-weight: 400;
+  font-family: "Inter";
+  font-style: normal;
+  font-size: 14px;
+  line-height: 110%;
+}
+
+#auth__help_buttons {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.auth__help_button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px;
+  border-radius: 10px;
+  border: 2px solid #eceeef;
+}
+
+#auth_block {
+  padding: 80px;
+  border-radius: 20px;
+  border: 1px solid #dde1e6;
+}
+
+input[type="text"],
+input[type="password"] {
+  margin: 8px 0px;
+  padding: 10px;
+  width: 100%;
+  font-size: 24px;
+  background-color: #f2f4f8;
+  border-radius: 10px;
+  border: none;
+}
+
+.auth__signin_input_button {
+font-weight: 600;
+  width: 100%;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: #099af2;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  line-height: 100%;
+  margin-top: 16px;
+  color: #ffffff;
+}
+
+#auth__inputs_save_forgot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+#auth__inputs {
+  margin-top: 16px;
+}
+
+#auth__help_title {
+  padding-top: 24px;
+  padding-bottom: 16px;
+  text-align: center;
+}
+
+.image_block {
+  width: 24px;
+  height: 24px;
+  /* background-color: #099af2; */
+}
+
+#auth__help {
+  margin-top: 24px;
+  border-top: 1px solid #dde1e6;
+}
+
+input[type="checkbox"] {
+  background-color: #fff;
+  border-radius: 100px;
+}
+#auth_vk_ico{
+  background-image: url(../img/vk.png);
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+#auth_ya_ico{
+  background-image: url(../img/yandex.png);
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+#auth_google_ico{
+  background-image: url(../img/google.png);
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+
