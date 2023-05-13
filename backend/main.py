@@ -37,9 +37,8 @@ def get_persons(session: Annotated[Session, Depends(get_session)]):
     persons_out = list()
     for person_db in persons_db:
         person = schemas.Person.from_orm(person_db)
-        bosses = person.bosses
-        employees = person.employees
-        person = schemas.Person.from_orm(person)
+        bosses = person_db.bosses
+        employees = person_db.employees
         person.departments = get_person_departments(session, person.id)
         person.subdepartments = get_person_subdepartments(session, person.id)
         person.boss_emails = list([i.email for i in bosses])
