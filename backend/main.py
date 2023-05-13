@@ -41,8 +41,10 @@ def get_persons(session: Annotated[Session, Depends(get_session)]):
         employees = person_db.employees
         departments = get_person_departments(session, person.id)
         subdepartments = get_person_subdepartments(session, person.id)
-        person.department = departments[0] if len(departments) != 0 else None
-        person.subdepartment = subdepartments[0] if len(subdepartments) != 0 else None
+        projects = list(person_db.projects)
+        person.project = projects[0].name if len(projects) != 0 else None
+        person.department = departments[0].name if len(departments) != 0 else None
+        person.subdepartment = subdepartments[0].name if len(subdepartments) != 0 else None
         person.boss_email = bosses[0].email if len(bosses) != 0 else None
         person.employee_email = employees[0].email if len(employees) != 0 else None
         persons_out.append(person)

@@ -162,9 +162,9 @@ class PersonDetail(PersonBase):
 
 class Person(PersonBase):
     id: int
-    project: Optional[Project]
-    department: Optional[Department]
-    subdepartment: Optional[Subdepartment]
+    project: Optional[str]
+    department: Optional[str]
+    subdepartment: Optional[str]
     boss_email: Optional[EmailStr]
     employee_email: Optional[EmailStr]
 
