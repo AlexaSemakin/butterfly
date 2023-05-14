@@ -5,6 +5,7 @@ from fastapi import FastAPI, Depends
 from sqlalchemy import insert
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from fastapi.middleware.cors import CORSMiddleware
 
 from backend.database import get_session
 from backend import models
@@ -12,6 +13,13 @@ from backend import schemas
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["POST", "GET"],
+    allow_headers=["*"]
+)
 
 def get_person_departments(session: Session, person_id: int):
     result = session.query(models.Department)\
