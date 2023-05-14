@@ -57,6 +57,7 @@ async function to_profile() {
 		await go_to_page(profileId + "/" + profileId + ".html");
 		active_nav(active_page);
 		settingsGet();
+		fill_personal_info();
 	}
 }
 
