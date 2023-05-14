@@ -174,7 +174,7 @@ def delete_person(session: Annotated[Session, Depends(get_session)], person_id: 
     session.delete(person)
     session.commit()
     chat_ids = []
-    for obj in session.execute(select(models.person_group).where(models.person_group.c.person_id == person.id)):
+    for obj in session.execute(select(models.person_group).where(models.person_group.c.person_id == person.id)).scalars().all():
         chat_ids.append(obj.group_id)
     try:
         for chat_id in chat_ids:
