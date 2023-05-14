@@ -23,21 +23,6 @@ class Settings(BaseModel):
     graph: Optional[bool]
 
 
-class ProjectBase(BaseModel):
-    name: Optional[str]
-
-
-class ProjectCreate(ProjectBase):
-    pass
-
-
-class Project(ProjectBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class RepositoryBase(BaseModel):
     name: Optional[str]
     url: Optional[str]
@@ -49,6 +34,22 @@ class RepositoryCreate(RepositoryBase):
 
 class Repository(RepositoryBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ProjectBase(BaseModel):
+    name: Optional[str]
+
+
+class ProjectCreate(ProjectBase):
+    pass
+
+
+class Project(ProjectBase):
+    id: int
+    repositories: Optional[typing.List[Repository]]
 
     class Config:
         orm_mode = True

@@ -1,4 +1,5 @@
 import json
+import typing
 from typing import Annotated, List
 from random import randint
 
@@ -134,6 +135,11 @@ def get_repository(session: Annotated[Session, Depends(get_session)], repository
     return session.query(models.Repository).get(repository_id)
 
 
+@app.get('/repositories', response_model=List[schemas.Repository])
+def get_repositories(session: Annotated[Session, Depends(get_session)]):
+    return session.query(models.Repository).all()
+
+
 @app.post('/repositories', response_model=schemas.Repository)
 def create_repository(session: Annotated[Session, Depends(get_session)], new_repository: schemas.RepositoryCreate):
     new_repository = models.Repository(**new_repository.dict(exclude_unset=True))
@@ -143,9 +149,14 @@ def create_repository(session: Annotated[Session, Depends(get_session)], new_rep
     return new_repository
 
 
-@app.get('/projects/{project_id}')
+@app.get('/projects/{project_id}', response_model=schemas.Project)
 def get_project(session: Annotated[Session, Depends(get_session)], project_id: int):
     return session.query(models.Project).get(project_id)
+
+
+@app.get('/projects', response_model=List[schemas.Project])
+def get_projects(session: Annotated[Session, Depends(get_session)]):
+    return session.query(models.Project).all()
 
 
 @app.post('/projects', response_model=schemas.Project)
@@ -162,6 +173,11 @@ def get_subdepartment(session: Annotated[Session, Depends(get_session)], subdepa
     return session.query(models.Subdepartment).get(subdepartment_id)
 
 
+@app.get('/subdepartments', response_model=List[schemas.Subdepartment])
+def get_subdepartments(session: Annotated[Session, Depends(get_session)]):
+    return session.query(models.Subdepartment).all()
+
+
 @app.post('/subdepartments', response_model=schemas.Subdepartment)
 def create_subdepartment(session: Annotated[Session, Depends(get_session)], new_subdepartment: schemas.SubdepartmentCreate):
     new_subdepartment = models.Subdepartment(**new_subdepartment.dict(exclude_unset=True))
@@ -174,6 +190,11 @@ def create_subdepartment(session: Annotated[Session, Depends(get_session)], new_
 @app.get('/departments/{department_id}')
 def get_department(session: Annotated[Session, Depends(get_session)], department_id: int):
     return session.query(models.Department).get(department_id)
+
+
+@app.get('/departments', response_model=List[schemas.Department])
+def get_departments(session: Annotated[Session, Depends(get_session)]):
+    return session.query(models.Department).all()
 
 
 @app.post('/departments', response_model=schemas.Department)
