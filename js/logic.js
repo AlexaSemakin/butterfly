@@ -78,6 +78,7 @@ async function to_chat() {
 		active_page = chatId;
 		await go_to_page(chatId + "/" + chatId + ".html");
 		active_nav(active_page);
+		close_account_profile();
 	}
 }
 
