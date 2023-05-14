@@ -1,6 +1,6 @@
 // _ draw graph
 var graph_tree;
-var mods;
+var nods;
 var local_graph;
 
 function center(id) {
@@ -9,7 +9,10 @@ function center(id) {
   });
 }
 
-function set_graph_to_block(id_el, block_id) {
+async function getData(s) {
+  return await (await fetch(s)).text();
+}
+async function set_graph_to_block(id_el, block_id) {
   if (local_graph != null) {
     local_graph.center(id_el);
     return;
@@ -17,8 +20,7 @@ function set_graph_to_block(id_el, block_id) {
 
   local_graph = new OrgChart(document.getElementById(block_id), {
     enableSearch: false,
-    template: "john",
-    // template: "ula",
+    template: "cool",
 
     mouseScrool: OrgChart.action.none,
     nodeMouseClick: OrgChart.action.none,
@@ -39,6 +41,7 @@ function set_graph_to_block(id_el, block_id) {
   local_graph.load(nods);
   local_graph.on("init", function () {
     local_graph.center(id_el);
+    // set_graph_to_block(1, "graph_view_window");
   });
 }
 
@@ -62,7 +65,7 @@ function open_card(sender, args) {
   }, 1);
 }
 
-function start(id_el) {
+async function start(id_el) {
   if (id_el === undefined) {
     id_el = 1;
   }
@@ -145,27 +148,29 @@ function start(id_el) {
     },
   });
 
-  nods = [
-    {
-      id: 1,
-      name: "John Smith",
-      post: "CEO",
-      department: "Application Development",
-      city: cities[1],
-      img: "https://balkangraph.com/js/img/1.jpg",
-    },
-  ];
-  for (let i = 2; i < 50; i++) {
-    nods.push({
-      id: i,
-      pid: rand(i),
-      name: "John Smith",
-      post: post[rand(post.length) - 2],
-      department: department[rand(department.length) - 1],
-      city: cities[rand(3) - 1],
-      img: "https://cdn.balkan.app/shared/" + ((i % 18) + 1) + ".jpg",
-    });
-  }
+  //   nods = [
+  //     {
+  //       id: 1,
+  //       name: "John Smith",
+  //       post: "CEO",
+  //       department: "Application Development",
+  //       city: cities[1],
+  //       img: "https://balkangraph.com/js/img/1.jpg",
+  //     },
+  //   ];
+  //   for (let i = 2; i < 50; i++) {
+  //     nods.push({
+  //       id: i,
+  //       pid: rand(i),
+  //       name: "John Smith",
+  //       post: post[rand(post.length) - 2],
+  //       department: department[rand(department.length) - 1],
+  //       city: cities[rand(3) - 1],
+  //       img: "https://cdn.balkan.app/shared/" + ((i % 18) + 1) + ".jpg",
+  //     });
+  //   }
+  const data = await getData("http://185.246.67.74:8080/personsGraph");
+  nods = JSON.parse(data);
 
   graph_tree.load(nods);
   graph_tree.on("init", function () {
@@ -194,203 +199,173 @@ function getInfo() {
 //       }
 // }
 
+function getText() {
+  return JSON.parse(dots_json);
+}
+
+// function start() {
+//   anychart.onDocumentReady(function () {
+//     // adding data
+//     let data = get_venna();
+//     data.sort();
+//     data.reverse();
+//     // creating a venn diagram with the data
+//     let chart = anychart.venn(data);
+//     console.log(data);
+//     // setting the labels
+//     chart
+//       .labels()
+//       .fontSize(14)
+//       .fontColor("#000")
+//       .hAlign("center")
+//       .vAlign("center")
+//       .fontWeight("500")
+//       .format("{%Name}");
+
+//     // setting the intersection labels
+//     chart.intersections().labels().fontSize(11).fontColor("#000").format("");
+
+//     // setting the title
+//     chart.title().enabled(true).useHtml(true).text("");
+
+//     // disabling the legend
+//     chart.legend(false);
+
+//     // improving the tooltip
+//     chart.tooltip().format("");
+//     chart.tooltip().separator(false);
+
+//     // setting the container id
+//     chart.container("container");
+
+//     // drawing the diagram
+//     chart.draw();
+//   });
+// }
+
+// function
+function get_dot(name, value, val, id) {
+  if (val == undefined) {
+    return { x: name, value: value, name: "" };
+  }
+  for (const item of val) {
+    if (item.id == id) {
+      return { x: name, value: value, name: item.name };
+    }
+  }
+}
+
+async function get_venna_data() {
+  const value = await getData("http://185.246.67.74:8080/personsDetail");
+  let val = JSON.parse(value);
+  let man = new Set();
+  let projects = new Set();
+  let departments = new Set();
+  let subdepartments = new Set();
+  for (let i = 0; i < val.length; i++) {
+    man.add(val[i].id);
+    for (let j = 0; j < val[i].projects.length; j++) {
+      projects.add(val[i].projects[j].id);
+    }
+    for (let j = 0; j < val[i].subdepartments.length; j++) {
+      subdepartments.add(val[i].subdepartments[j].id);
+    }
+    for (let j = 0; j < val[i].departments.length; j++) {
+      departments.add(val[i].departments[j].id);
+    }
+  }
+  var data = [];
+  for (const item of man.keys()) {
+    data.push(get_dot("M" + item, 2, val, item));
+  }
+  for (const item of projects.keys()) {
+    data.push(get_dot("P" + item, 50, val.projects));
+  }
+  for (const item of subdepartments.keys()) {
+    data.push(get_dot("S" + item, 300, val.subdepartments));
+  }
+  for (const item of departments.keys()) {
+    data.push(get_dot("D" + item, 500, val.department));
+  }
+
+  let links = new Set();
+  for (let i = 0; i < val.length; i++) {
+    for (let j = 0; j < val[i].projects.length; j++) {
+      links.add("P" + val[i].projects[j].id + "&M" + val[i].id);
+    }
+  }
+  for (const item of links) {
+    data.push(get_dot(item, 25));
+  }
+  links.clear();
+  for (let i = 0; i < val.length; i++) {
+    for (let j = 0; j < val[i].projects.length; j++) {
+      for (let k = 0; k < val[i].subdepartments.length; k++) {
+        links.add(
+          "S" + val[i].subdepartments[k].id + "&P" + val[i].projects[j].id
+        );
+      }
+    }
+  }
+  for (const item of links) {
+    data.push(get_dot(item, 100));
+  }
+
+  links.clear();
+  for (let i = 0; i < val.length; i++) {
+    for (let j = 0; j < val[i].subdepartments.length; j++) {
+      for (let k = 0; k < val[i].departments.length; k++) {
+        links.add(
+          "D" + val[i].departments[k].id + "&S" + val[i].subdepartments[j].id
+        );
+      }
+    }
+  }
+  for (const item of links) {
+    data.push(get_dot(item, 300));
+  }
+  console.log(data);
+  return data;
+}
+
 // _ draw project
 const drawProject = () =>
-  anychart.onDocumentReady(function () {
-    // adding data
-    let data = [
-      {
-        x: "A",
-        value: 60,
-        name: "Project",
-        normal: { fill: "#afb5f1 0.7" },
-      },
-      {
-        x: "A1",
-        value: 60,
-        name: "Project",
-        normal: { fill: "#afb5f1 0.7" },
-      },
-      {
-        x: "A3",
-        value: 60,
-        name: "Project",
-        normal: { fill: "#afb5f1 0.7" },
-      },
-      {
-        x: "C",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "C1",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "C2",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "B",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "B2",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "B1",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "D",
-        value: 10,
-        name: "Human",
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "Dep",
-        value: 300,
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: "Dep1",
-        value: 300,
-        normal: { fill: "#c7c2bd 0.7" },
-      },
-      {
-        x: ["Dep", "A"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "A1"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "A3"],
-        value: 100,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep", "B"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "B1"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "B2"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep", "C"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "C2"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "C1"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep", "D"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["Dep1", "D1"],
-        value: 300,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A", "C"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A1", "C1"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A3", "C2"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A", "B"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A1", "A3", "B1"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A3", "B2"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A", "D"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A1", "B1"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-      {
-        x: ["A3", "B1"],
-        value: 10,
-        normal: { fill: "#99a0df 0.7" },
-      },
-    ];
+  anychart.onDocumentReady(async function () {
+    anychart.onDocumentReady(async function () {
+      // adding data
+      let data = await get_venna_data();
+      data.sort();
+      data.reverse();
+      // creating a venn diagram with the data
+      let chart = anychart.venn(data);
+      // console.log(data);
+      // setting the labels
+      chart
+        .labels()
+        .fontSize(14)
+        .fontColor("#000")
+        .hAlign("center")
+        .vAlign("center")
+        .fontWeight("500")
+        .format("{%name}");
 
-    // creating a venn diagram with the data
-    let chart = anychart.venn(data);
-    // setting the labels
-    chart
-      .labels()
-      .fontSize(14)
-      .fontColor("#000")
-      .hAlign("center")
-      .vAlign("center")
-      .fontWeight("500");
-    // setting the intersection labels
-    chart.intersections().labels().fontSize(11).fontColor("#000").format("");
-    // setting the title
-    chart.title().enabled(false).useHtml(false);
-    chart.legend(false);
-    // improving the tooltip
-    chart.tooltip().format("");
-    chart.tooltip().separator(false);
-    // setting the container id
-    chart.container("container");
-    // drawing the diagram
-    chart.draw();
+      // setting the intersection labels
+      chart.intersections().labels().fontSize(11).fontColor("#000").format("");
+
+      // setting the title
+      chart.title().enabled(true).useHtml(true).text("");
+
+      // disabling the legend
+      chart.legend(false);
+
+      // improving the tooltip
+      chart.tooltip().format("");
+      chart.tooltip().separator(false);
+
+      // setting the container id
+      chart.container("container");
+
+      // drawing the diagram
+      chart.draw();
+    });
   });
