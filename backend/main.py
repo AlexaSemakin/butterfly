@@ -69,6 +69,17 @@ def get_subdepartment_persons(session: Session, subdepartment_id: int):
     return result
 
 
+def get_person_detail(session: Session, person_db):
+    person = schemas.PersonDetail.from_orm(person_db)
+    bosses = person_db.bosses
+    employees = person_db.employees
+    person.departments = get_person_departments(session, person.id)
+    person.subdepartments = get_person_subdepartments(session, person.id)
+    person.boss_emails = list([i.email for i in bosses])
+    person.employee_emails = list([i.email for i in employees])
+    return person
+
+
 @app.get('/persons', response_model=List[schemas.Person])
 def get_persons(session: Annotated[Session, Depends(get_session)]):
     persons_db = session.query(models.Person).all()
@@ -378,9 +389,9 @@ def search(session: Annotated[Session, Depends(get_session)], q: str):
     subdepartments = list([i[2] for i in models.search(models.Subdepartment, q, ('name',))])
     persons = []
     for d in departments:
-        persons += list([{'name': 'person', 'column': 'department', 'object': i}
+        persons += list([{'name': 'person', 'column': 'department', 'object': get_person_detail(session, i)}
                          for i in get_department_persons(session, d.id)])
     for s in subdepartments:
-        persons += list([{'name': 'person', 'column': 'subdepartment', 'object': i}
+        persons += list([{'name': 'person', 'column': 'subdepartment', 'object': get_person_detail(session, i)}
                          for i in get_subdepartment_persons(session, s.id)])
     return persons
