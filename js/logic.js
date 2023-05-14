@@ -6,9 +6,12 @@ const paramsApi = {
 	url: "http://185.246.67.74:8080/"
 }
 
-async function get_fetched_text(responseUrl) {
+async function get_fetched_text(responseUrl, query="") {
 	try {
-		const response = await fetch(paramsApi.url + responseUrl);
+		if(query != "") {
+			query = "/" + query;
+		}
+		const response = await fetch(paramsApi.url + responseUrl + query);
 		if (!response.ok) {
 			throw new Error(`Error! status: ${response.status}`);
 		}
@@ -252,33 +255,11 @@ function close_account_profile() {
 
 // search 
 document.getElementById("input_search").addEventListener('keydown', e => {
-	
+	console.log(search_user());
 })
 
-async function doRequest() {
-	let data = {''};
 
-	let res = await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-	});
-
-	if (res.ok) {
-
-		// let text = await res.text();
-		// return text;
-
-		let ret = await res.json();
-		return JSON.parse(ret.data);
-
-	} else {
-		return `HTTP error: ${res.status}`;
-	}
-}
 
 async function search_user() {
-
+	return await get_fetched_text("search", "ksdfj");
 }
