@@ -171,10 +171,10 @@ def update_person(session: Annotated[Session, Depends(get_session)], person_id: 
 def delete_person(session: Annotated[Session, Depends(get_session)], person_id: int):
     person = session.query(models.Person).get(person_id)
     telegram_id = person.telegram_id
-    session.delete(person)
-    session.commit()
     chat_ids = []
     objs = session.execute(select(models.person_group).where(models.person_group.c.person_id == person.id))
+    session.commit()
+    session.delete(person)
     session.commit()
     for obj in objs:
         chat_ids.append(obj.group_id)
