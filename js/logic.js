@@ -36,9 +36,15 @@ async function to_graph() {
     active_page = cardId;
     await go_to_page(cardId + "/" + cardId + ".html");
     active_nav(active_page);
-    start(10);
+    start(1);
   }
 }
+
+function go_to_() {
+	close_account_profile();
+	to_graph();
+}
+
 async function to_project() {
   let cardId = "graph-project-viev";
   if (active_page != cardId) {
