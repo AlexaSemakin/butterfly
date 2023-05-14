@@ -1,7 +1,7 @@
 import json
 from backend import database
 
-from sqlalchemy import Table, Column, Integer, MetaData, ForeignKey, String, Date, Boolean, Text, JSON
+from sqlalchemy import Table, Column, Integer, MetaData, ForeignKey, String, Date, Boolean, Text, JSON, BigInteger
 from sqlalchemy.orm import DeclarativeBase, relationship, backref
 
 
@@ -66,6 +66,7 @@ class Person(Base):
     city = Column(String(200), nullable=True)  # nullable=False)
     employment_date = Column(Date(), nullable=True)  # nullable=False)
     telegram = Column(String(200), nullable=True)
+    telegram_id = Column(String(32), nullable=True)
     notification_lang = Column(String(200), nullable=True)
     about = Column(Text(), nullable=True)
     settings = Column(JSON(), nullable=False, default=get_person_settings)

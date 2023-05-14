@@ -3,18 +3,25 @@ import typing
 from typing import Annotated, List
 from random import randint
 
+import telebot.apihelper
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import insert
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
+from backend.config import TELEGRAM_GROUP_ID, TELEGRAM_TOKEN
+
 from backend.database import get_session
 from backend import models
 from backend import schemas
 
+import telebot
+from telebot import TeleBot
+
 
 app = FastAPI()
+bot = TeleBot(TELEGRAM_TOKEN)
 
 
 app.add_middleware(
@@ -123,10 +130,15 @@ def create_person(session: Annotated[Session, Depends(get_session)], new_person:
 @app.post('/persons/delete/{person_id}')
 def delete_person(session: Annotated[Session, Depends(get_session)], person_id: int):
     person = session.query(models.Person).get(person_id)
-    telegram = person.telegram
+    telegram_id = person.telegram_id
     session.delete(person)
     session.commit()
-    # TODO: code...
+    try:
+        bot.kick_chat_member(chat_id=TELEGRAM_GROUP_ID, user_id=telegram_id)
+        bot.send_message(TELEGRAM_GROUP_ID, 'Уволен.')
+    except telebot.apihelper.ApiTelegramException:
+        pass
+    return {'message': 'deleted'}
 
 
 @app.post('/persons/settings/{person_email}')
