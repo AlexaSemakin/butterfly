@@ -250,8 +250,9 @@ function change_body_grid(rm_class, add_class) {
   document.body.classList.add(add_class);
 }
 
-function open_account_profile() {
+async function open_account_profile(el) {
   // TODO: parse json
+
 
   document.getElementById("account_profile").style.display = "block";
   document.getElementById("account_profile").style.gridArea = "_user";
@@ -290,10 +291,10 @@ async function add_notice(text) {
     let aObj = await get_fetched_text("persons");
     for (let i = 0; i < aObj.length; i++) {
       notices += `
-			<div class="profile" onclick="open_account_profile()">
+			<div class="profile" id="${aObj[i].id}" onclick="open_account_profile(this)">
 				  <img src="${aObj[i].image}" alt="img" class="profile_photo_image">
 				  <div class="profile_info">
-					  <div class="profile_info_name">${aObj[i].name}</div>
+					  <div class="profile_info_name">${aObj[i].name} ${aObj[i].surname}</div>
 					  <div class="profile_info_post">${aObj[i].post}</div>
 					  <div class="profile_info_department">${aObj[i].department}</div>
 				  </div>
@@ -303,8 +304,8 @@ async function add_notice(text) {
   } else {
     for (let i = 0; i < obj.length; i++) {
       notices += `
-			<div class="profile" onclick="open_account_profile()">
-				  <img src="${obj[i].object.image}" alt="img" class="profile_photo_image">
+			<div class="profile" id="${obj[i].object.id}" onclick="open_account_profile(this)">
+				  <img src="${obj[i].object.image}"  alt="img" class="profile_photo_image">
 				  <div class="profile_info">
 					  <div class="profile_info_name">${obj[i].object.name} ${obj[i].object.surname}</div>
 					  <div class="profile_info_post">${obj[i].object.post}</div>
