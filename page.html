@@ -6,11 +6,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="style/panel_style.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="style/settings_style.css" type="text/css">
-	<link rel="stylesheet" href="style/chat_style.css">
-	<link rel="stylesheet" href="style/adress-book.css">
-	<link rel="stylesheet" href="style/project_style.css">
-	<link rel="stylesheet" href="style/accout_profile_style.css">
+	<link rel="stylesheet" href="style/settings_style.css" type="text/css" />
+	<link rel="stylesheet" href="style/chat_style.css" />
+	<link rel="stylesheet" href="style/adress-book.css" />
+	<link rel="stylesheet" href="style/project_style.css" />
+	<link rel="stylesheet" href="style/accout_profile_style.css" />
 	<meta name="theme-color" content="#fff" />
 	<title>case #1</title>
 
@@ -21,15 +21,16 @@
 	<script src="https://kit.fontawesome.com/4b9fdd072c.js" crossorigin="anonymous"></script>
 	<script src="/js/adress-book.js"></script>
 	<script src="/js/graph.js"></script>
+	<script src="js/settings.js"></script>
 	<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
 	<script src="https://cdn.jsdelivr.net/npm/codex.editor.header@2.1.0/dist/bundle.js"></script> -->
 	<!-- <script src="js/setting.js"></script> -->
 </head>
 
-<body class="grid_close" onload="start()">
+<body class="grid_close">
 	<ul id="loading-brick"></ul>
 
-	<div id="account_profile" style="display: none;">
+	<div id="account_profile" style="display: none">
 		<div id="account_profile_header">
 			<div class="ap_header_text">
 				<i class="fa-regular fa-user fa-sm"></i>
@@ -42,37 +43,45 @@
 			<h3>Контактная информация</h3>
 			<div class="ap_info">
 				<div class="ap_image">
-					<img src="https://balkangraph.com/js/img/1.jpg" alt="">
-					<div class="graph_view_window"></div>
+					<img src="https://balkan.app/js/img/1.jpg" alt="" />
+					<div id="graph_view_window" class="graph_view_window" onclick="go_to_()"></div>
 				</div>
 				<div class="ap_personal_info">
-					<div style="display: block;">
-						<div id="ap_bottom_text">ФИО: Влада Шудегова Константиновна</div>
+					<div style="display: block">
+						<div id="ap_bottom_text">ФИО: Семакин Александр Александрович</div>
 					</div>
 					<div class="ap_personal_list">
 						<div>
 							<div сlass="ap_top_text">День рождение</div>
-							<div class="ap_bottom_text">Влада</div>
+							<div class="ap_bottom_text">2000-09-27</div>
 						</div>
 						<div>
 							<div сlass="ap_top_text">Пол</div>
-							<div class="ap_bottom_text">Влада</div>
+							<div class="ap_bottom_text">Мужской</div>
 						</div>
 						<div>
 							<div сlass="ap_top_text">Telegram</div>
-							<div class="ap_bottom_text">Влада</div>
+							<div class="ap_bottom_text">AlexSemakin</div>
 						</div>
 						<div>
 							<div сlass="ap_top_text">Дата принятия на работу</div>
-							<div class="ap_bottom_text">Влада</div>
+							<div class="ap_bottom_text">2023-05-12</div>
 						</div>
 						<div>
 							<div сlass="ap_top_text">Телефон</div>
-							<div class="ap_bottom_text">Влада</div>
+							<div class="ap_bottom_text">+7(917)-465-20-17</div>
+						</div>
+						<div>
+							<div сlass="ap_top_text">Текущий проект</div>
+							<div class="ap_bottom_text">Административный</div>
+						</div>
+						<div>
+							<div сlass="ap_top_text">Почта</div>
+							<div class="ap_bottom_text">bakyt.student@gmail.com</div>
 						</div>
 						<div>
 							<div сlass="ap_top_text">Город</div>
-							<div class="ap_bottom_text">Влада</div>
+							<div class="ap_bottom_text">Томск</div>
 						</div>
 					</div>
 				</div>
@@ -81,51 +90,7 @@
 		<div class="ap_about_me">
 			<h3>Обо мне</h3>
 			<p>
-				Шудегова Влада. Мне 19 лет. Город Глазов.
-
-				Образование:
-				Учусь в Томском Государственном Университете на факультете прикладной математики и информатики.
-
-				Проекты: Сейчас занимаюсь разработкой программы для учёта успеваемости студентов в вузе.
-				Знаю языки: C /C++/C# (.net Framework, net core, amarin)/Python Владею Figma, Adobe Illustrator.
-
-				Была вожатой в пришкольном лагере. Могу найти общий язык с ребёнком.
-				Являюсь действующим репетитором по математике.
-
-				Если говорить о моём хобби. Люблю играть на гитаре и ходить в походы. И, конечно, куда же без
-				компьютерных игрушек? Играю в Fortnite и Stradew Valley.
-			</p>
-			<h3>Обо мне</h3>
-			<p>
-				Шудегова Влада. Мне 19 лет. Город Глазов.
-
-				Образование:
-				Учусь в Томском Государственном Университете на факультете прикладной математики и информатики.
-
-				Проекты: Сейчас занимаюсь разработкой программы для учёта успеваемости студентов в вузе.
-				Знаю языки: C /C++/C# (.net Framework, net core, amarin)/Python Владею Figma, Adobe Illustrator.
-
-				Была вожатой в пришкольном лагере. Могу найти общий язык с ребёнком.
-				Являюсь действующим репетитором по математике.
-
-				Если говорить о моём хобби. Люблю играть на гитаре и ходить в походы. И, конечно, куда же без
-				компьютерных игрушек? Играю в Fortnite и Stradew Valley.
-			</p>
-			<h3>Обо мне</h3>
-			<p>
-				Шудегова Влада. Мне 19 лет. Город Глазов.
-
-				Образование:
-				Учусь в Томском Государственном Университете на факультете прикладной математики и информатики.
-
-				Проекты: Сейчас занимаюсь разработкой программы для учёта успеваемости студентов в вузе.
-				Знаю языки: C /C++/C# (.net Framework, net core, amarin)/Python Владею Figma, Adobe Illustrator.
-
-				Была вожатой в пришкольном лагере. Могу найти общий язык с ребёнком.
-				Являюсь действующим репетитором по математике.
-
-				Если говорить о моём хобби. Люблю играть на гитаре и ходить в походы. И, конечно, куда же без
-				компьютерных игрушек? Играю в Fortnite и Stradew Valley.
+				Отличный рыбак друг и товарищ!
 			</p>
 		</div>
 	</div>
@@ -134,15 +99,14 @@
 		<div id="settings" class="user_profile" onclick="to_profile()">
 			<div class="user_profile__image"></div>
 			<div id="user_profile__info">
-				<div id="user_profile__info__name">Иван Иваныч</div>
-				<div id="user_profile__info__role">Админ</div>
+				<div id="user_profile__info__name">Александр Семакакин</div>
 			</div>
 		</div>
 		<div id="nav">
 			<a>
 				<div class="nav_button active_nav_button__image" id="graph" onclick="to_graph()">
 					<i class="fa-solid fa-circle-nodes fa-xl"></i>
-					Структура
+					Компания
 				</div>
 			</a>
 			<a>

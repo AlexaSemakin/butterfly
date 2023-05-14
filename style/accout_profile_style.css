@@ -89,7 +89,7 @@
 
 .ap_personal_info>* {
 	display: grid;
-	grid-template-columns: repeat(3, auto);
+	grid-template-columns: repeat(2, auto);
 	grid-auto-flow: dense;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
@@ -121,6 +121,3 @@
 	margin-right: 10px;
 }
 
-/* .ap_personal_info li {
-	margin-bottom: 5px;
-} */
