@@ -6,7 +6,7 @@ from random import randint
 import telebot.apihelper
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import insert
+from sqlalchemy import insert, select
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -173,9 +173,13 @@ def delete_person(session: Annotated[Session, Depends(get_session)], person_id: 
     telegram_id = person.telegram_id
     session.delete(person)
     session.commit()
+    chat_ids = []
+    for obj in session.execute(select(models.person_group).where(models.person_group.c.person_id == person.id)):
+        chat_ids.append(obj.group_id)
     try:
-        bot.kick_chat_member(chat_id=TELEGRAM_GROUP_ID, user_id=telegram_id)
-        bot.send_message(TELEGRAM_GROUP_ID, 'Уволен.')
+        for chat_id in chat_ids:
+            bot.kick_chat_member(chat_id=chat_id, user_id=telegram_id)
+            bot.send_message(chat_id, 'Уволен.')
     except telebot.apihelper.ApiTelegramException:
         pass
     return {'message': 'deleted'}
