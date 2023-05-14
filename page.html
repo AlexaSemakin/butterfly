@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="style/chat_style.css">
 	<link rel="stylesheet" href="style/adress-book.css">
 	<link rel="stylesheet" href="style/project_style.css">
+	<link rel="stylesheet" href="style/accout_profile_style.css">
 	<meta name="theme-color" content="#fff" />
 	<title>case #1</title>
 
@@ -25,7 +26,126 @@
 
 </head>
 
-<body onload="start()">
+<body class="grid_close" onload="start()">
+	<ul id="loading-brick"></ul>
+
+	<div id="account_profile" style="display: none;">
+		<div id="account_profile_header">
+			<div class="ap_header_text">
+				<i class="fa-regular fa-user fa-sm"></i>
+				<div>Информация о пользователе</div>
+				<div class="close" onclick="close_account_profile()"></div>
+			</div>
+			<div id="notice__line_header"></div>
+		</div>
+		<div class="full_ap_info">
+			<h3>Контактная информация</h3>
+			<div class="ap_info">
+				<div class="ap_image">
+					<img src="https://balkangraph.com/js/img/1.jpg" alt="">
+					<div class="graph_view_window"></div>
+				</div>
+				<div class="ap_personal_info">
+					<ul>
+						<li>
+							<div сlass="ap_top_text">Имя</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Фамилия</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Отчество</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">День рождение</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Пол</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Telegram</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Дата принятия на работу</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Телефон</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Город</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Дата принятия на работу</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+						<li>
+							<div сlass="ap_top_text">Дата принятия на работу</div>
+							<div class="ap_bottom_text">Влада</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="ap_about_me">
+			<h3>Обо мне</h3>
+			<p>
+				Шудегова Влада. Мне 19 лет. Город Глазов.
+
+				Образование:
+				Учусь в Томском Государственном Университете на факультете прикладной математики и информатики.
+
+				Проекты: Сейчас занимаюсь разработкой программы для учёта успеваемости студентов в вузе.
+				Знаю языки: C /C++/C# (.net Framework, net core, amarin)/Python Владею Figma, Adobe Illustrator.
+
+				Была вожатой в пришкольном лагере. Могу найти общий язык с ребёнком.
+				Являюсь действующим репетитором по математике.
+
+				Если говорить о моём хобби. Люблю играть на гитаре и ходить в походы. И, конечно, куда же без
+				компьютерных игрушек? Играю в Fortnite и Stradew Valley.
+			</p>
+			<h3>Обо мне</h3>
+			<p>
+				Шудегова Влада. Мне 19 лет. Город Глазов.
+
+				Образование:
+				Учусь в Томском Государственном Университете на факультете прикладной математики и информатики.
+
+				Проекты: Сейчас занимаюсь разработкой программы для учёта успеваемости студентов в вузе.
+				Знаю языки: C /C++/C# (.net Framework, net core, amarin)/Python Владею Figma, Adobe Illustrator.
+
+				Была вожатой в пришкольном лагере. Могу найти общий язык с ребёнком.
+				Являюсь действующим репетитором по математике.
+
+				Если говорить о моём хобби. Люблю играть на гитаре и ходить в походы. И, конечно, куда же без
+				компьютерных игрушек? Играю в Fortnite и Stradew Valley.
+			</p>
+			<h3>Обо мне</h3>
+			<p>
+				Шудегова Влада. Мне 19 лет. Город Глазов.
+
+				Образование:
+				Учусь в Томском Государственном Университете на факультете прикладной математики и информатики.
+
+				Проекты: Сейчас занимаюсь разработкой программы для учёта успеваемости студентов в вузе.
+				Знаю языки: C /C++/C# (.net Framework, net core, amarin)/Python Владею Figma, Adobe Illustrator.
+
+				Была вожатой в пришкольном лагере. Могу найти общий язык с ребёнком.
+				Являюсь действующим репетитором по математике.
+
+				Если говорить о моём хобби. Люблю играть на гитаре и ходить в походы. И, конечно, куда же без
+				компьютерных игрушек? Играю в Fortnite и Stradew Valley.
+			</p>
+		</div>
+	</div>
 
 	<navigate>
 		<div id="settings" class="user_profile" onclick="to_profile()">
@@ -60,6 +180,7 @@
 					Чаты
 				</div>
 			</a>
+			<button id="info_button"></button>
 		</div>
 	</navigate>
 

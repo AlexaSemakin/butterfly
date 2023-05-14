@@ -1,0 +1,110 @@
+#notice_bottom {
+	padding: 10px;
+}
+
+#notice__line_header {
+	border-bottom: 1px #dde1e6 solid;
+}
+
+
+#account_profile {
+	height: 100%;
+	width: 469px;
+	background-color: white;
+	padding: 34px 16px;
+	box-sizing: border-box;
+	overflow-y: scroll;
+}
+
+#account_profile_header {
+	position: relative;
+}
+
+.ap_header_text {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+}
+
+.ap_close_button {
+	border: none;
+	background-color: transparent;
+}
+
+.close {
+	position: relative;
+	width: 32px;
+	height: 32px;
+	opacity: 0.3;
+}
+
+.close:hover {
+	opacity: 1;
+}
+
+.close:before,
+.close:after {
+	position: absolute;
+	left: 15px;
+	top: 5px;
+	content: ' ';
+	height: 22px;
+	width: 2px;
+	background-color: #333;
+}
+
+.close:before {
+	transform: rotate(45deg);
+}
+
+.close:after {
+	transform: rotate(-45deg);
+}
+
+.ap_info {
+	display: flex;
+}
+
+.ap_image img {
+	
+}
+
+.ap_image > * {
+	border-radius: 10px;
+}
+
+.graph_view_window {
+	width: 100%;
+	height: 200px;
+	background-color: black;
+}
+
+.ap_personal_info ul {
+	list-style: none;
+}
+
+.ap_personal_info li {
+	margin-bottom: 5px;
+}
+
+.ap_personal_info li :first-child {
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 117%;
+
+	opacity: 0.7;
+}
+
+.ap_personal_info li :first-child {
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 117%;
+
+	opacity: 0.7;
+}
+
+.ap_bottom_text {
+	font-weight: 400;
+	font-size: 16px;
+}

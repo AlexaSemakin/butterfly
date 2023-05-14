@@ -1,6 +1,9 @@
 let active_page = "";
 let show_search_bar = true;
 const search_bar = document.querySelector('.menu');
+const paramsApi = {
+	url: "http://185.246.67.74:8080/"
+}
 
 function add_search_bar() {
 	if (show_search_bar == false) {
@@ -94,7 +97,9 @@ async function changeArticle(id) {
 	}
 }
 
-
+document.getElementById("info_button").addEventListener("click", () => {
+	open_account_profile();
+});
 
 function rand(a) {
 	return parseInt(Math.floor(Math.random() * a)) + 1;
@@ -119,7 +124,33 @@ async function load_graph() {
 	active_nav(active_page);
 }
 
-// draw graph
+// draw loading
+const savedId = document.getElementById('loading-brick');
+let loadCount = 0;
+function setLoading() {
+	if (loadCount < 4) {
+		console.log(1);
+		const li_el = document.createElement('li');
+		const div_text = document.createElement('div');
+		const icon_el = document.createElement('i');
+		const text = document.createTextNode("Сохранено");
+		icon_el.classList.add("fa-solid", "fa-check", "fa-xl");
+		icon_el.style.color = "#808000";
+
+
+		div_text.appendChild(text);
+		li_el.appendChild(div_text);
+		li_el.appendChild(icon_el);
+
+		savedId.appendChild(li_el);
+		setTimeout((le_el) => {
+			savedId.firstElementChild.remove();
+			index--;
+		}, 3000);
+	}
+}
+
+// _ draw graph
 function start() {
 	changeArticle("graph");
 	//JavaScript
@@ -244,7 +275,7 @@ function start() {
 // }
 
 
-// draw project
+// _ draw project
 const drawProject = () => anychart.onDocumentReady(function () {
 	// adding data  
 	let data = [
@@ -447,26 +478,48 @@ const generateHtml = (obj, title_text) => {
 	}
 	document.getElementById("noti_blocks").innerHTML = htmlText;
 }
-const settingsGet = () => {
+
+async function settingsGet() {
 	const title_text = ["Имя", "Фамилия", "Почта", "Должность", "Отчество",
 		"Дата", "Пол", "Резюме", "Телефон", "Город", "Дата приема на работу", "Телеграм", "Язык уведолении", "О человеке", "Граф"];
-	const someJson = {
-		"name": true,
-		"surname": false,
-		"email": true,
-		"post": true,
-		"patronymic": true,
-		"birth_date": false,
-		"gender": true,
-		"summary": false,
-		"phone": true,
-		"city": true,
-		"employment_date": false,
-		"telegram": true,
-		"notification_lang": true,
-		"about": true,
-		"graph": true
-	}
-	const jsonEntries = Object.entries(someJson);
-	generateHtml(jsonEntries, title_text);
+	const userPersonalSettings = await (await fetch(paramsApi.url + "personsDetail")).text();
+	const user_sett = JSON.parse(userPersonalSettings);
+	const user_entries = Object.entries(user_sett[0].settings);
+	console.log(settings);
+	generateHtml(user_entries, title_text);
+}
+
+// posts settings
+const postPersonalInfo = () => {
+	const info_el = document.querySelectorAll('._user_info');
+	info_el.forEach(el => {
+		console.log(el.value);
+	});
+}
+
+// get and set values of setting
+
+// _ change page
+let is_opened = false;
+function change_body_grid(rm_class, add_class) {
+	document.body.classList.remove(rm_class);
+	document.body.classList.add(add_class);
+}
+
+function open_account_profile() {
+
+		// TODO: parse json
+
+		document.getElementById("account_profile").style.display = "block";
+		document.getElementById("account_profile").style.gridArea = "_user";
+
+		change_body_grid("grid_close", "grid_open");
+		is_opened = true;
+}
+function close_account_profile() {
+
+		change_body_grid("grid_open", "grid_close");
+		document.getElementById("account_profile").style.display = "none";
+		is_opened = false;
+
 }
