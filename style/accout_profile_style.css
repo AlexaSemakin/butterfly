@@ -64,13 +64,20 @@
 
 .ap_info {
 	display: flex;
+	flex-direction: column;
+}
+
+.ap_image {
+	display: flex;
+
 }
 
 .ap_image img {
-	
+	display: flex;
+	margin-right: 4px;
 }
 
-.ap_image > * {
+.ap_image>* {
 	border-radius: 10px;
 }
 
@@ -80,15 +87,23 @@
 	background-color: black;
 }
 
-.ap_personal_info ul {
-	list-style: none;
+.ap_personal_info>* {
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	grid-auto-flow: dense;
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
 }
 
-.ap_personal_info li {
-	margin-bottom: 5px;
+#ap_bottom_text {
+	white-space: nowrap;
+	font-weight: 400;
+	font-size: 16px;
+	margin: 10px 0;
 }
 
-.ap_personal_info li :first-child {
+.ap_personal_list div>*:first-child {
+
 	font-weight: 400;
 	font-size: 12px;
 	line-height: 117%;
@@ -96,15 +111,16 @@
 	opacity: 0.7;
 }
 
-.ap_personal_info li :first-child {
-	font-weight: 400;
-	font-size: 12px;
-	line-height: 117%;
-
-	opacity: 0.7;
-}
-
-.ap_bottom_text {
+.ap_personal_list div>*:last-child {
+	white-space: nowrap;
 	font-weight: 400;
 	font-size: 16px;
 }
+
+.ap_personal_list div {
+	margin-right: 10px;
+}
+
+/* .ap_personal_info li {
+	margin-bottom: 5px;
+} */
