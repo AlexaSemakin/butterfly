@@ -8,9 +8,9 @@ const paramsApi = {
   url: "http://185.246.67.74:8080/",
 };
 
-async function get_fetched_text(responseUrl) {
+async function get_fetched_text(responseUrl, query = "") {
   try {
-    const response = await fetch(paramsApi.url + responseUrl);
+    const response = await fetch(paramsApi.url + responseUrl + query);
     if (!response.ok) {
       throw new Error(`Error! status: ${response.status}`);
     }
@@ -72,6 +72,7 @@ async function to_adress_book() {
     await go_to_page(adressId + "/" + adressId + ".html");
     active_nav(active_page);
     add_notice();
+    await add_notice("skldfjsldkfjs;ldkjfs;ldkfjsdfjk");
   }
 }
 
@@ -265,28 +266,54 @@ function close_account_profile() {
 }
 
 // search
-document.getElementById("input_search").addEventListener("keydown", (e) => {});
-
-async function doRequest() {
-  // let data = {''};
-
-  let res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (res.ok) {
-    // let text = await res.text();
-    // return text;
-
-    let ret = await res.json();
-    return JSON.parse(ret.data);
-  } else {
-    return `HTTP error: ${res.status}`;
+const search_bar_el = document.getElementById("input_search");
+search_bar_el.addEventListener("keydown", async (e) => {
+  if (e.key === "Enter") {
+    add_notice(search_bar_el.value);
   }
+});
+
+async function search_user(text) {
+  return await get_fetched_text("search/", text);
 }
 
-async function search_user() {}
+async function add_notice(text) {
+  let block = document.getElementById("notice__messages");
+  let obj = "";
+  if (text.length > 0) {
+    obj = await search_user(text);
+  }
+  // console.log(obj, text);
+  let notices = "";
+  if (obj.length == 0) {
+    // notices += `<div>Не найдено ${text}</div>`;
+    let aObj = await get_fetched_text("persons");
+    for (let i = 0; i < aObj.length; i++) {
+      notices += `
+			<div class="profile" onclick="open_account_profile()">
+				  <img src="${aObj[i].image}" alt="img" class="profile_photo_image">
+				  <div class="profile_info">
+					  <div class="profile_info_name">${aObj[i].name}</div>
+					  <div class="profile_info_post">${aObj[i].post}</div>
+					  <div class="profile_info_department">${aObj[i].department}</div>
+				  </div>
+			  </div>
+			`;
+    }
+  } else {
+    for (let i = 0; i < obj.length; i++) {
+      notices += `
+			<div class="profile" onclick="open_account_profile()">
+				  <img src="${obj[i].object.image}" alt="img" class="profile_photo_image">
+				  <div class="profile_info">
+					  <div class="profile_info_name">${obj[i].object.name} ${obj[i].object.surname}</div>
+					  <div class="profile_info_post">${obj[i].object.post}</div>
+					  <div class="profile_info_department">${obj[i].object.department}</div>
+				  </div>
+			  </div>
+			`;
+    }
+  }
+
+  block.innerHTML = notices;
+}
