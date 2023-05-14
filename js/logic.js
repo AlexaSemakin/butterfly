@@ -1,4 +1,5 @@
 let active_page = "";
+
 let show_search_bar = true;
 const search_bar = document.querySelector(".menu");
 to_profile();
@@ -14,12 +15,12 @@ async function get_fetched_text(responseUrl) {
       throw new Error(`Error! status: ${response.status}`);
     }
 
-    const user_data = await response.json();
-    console.log(user_data);
-    return user_data;
-  } catch (err) {
-    console.log(err);
-  }
+		const user_data = await response.json();
+		return user_data;
+	}
+	catch (err) {
+		console.log(err);
+	}
 }
 
 function add_search_bar() {
@@ -51,16 +52,18 @@ async function to_project() {
 }
 
 async function to_profile() {
-  let profileId = "settings";
-  if (active_page != profileId) {
-    add_search_bar();
-    active_page = profileId;
-    await go_to_page(profileId + "/" + profileId + ".html");
-    active_nav(active_page);
-    settingsGet();
-    fill_personal_info();
-  }
+	let profileId = "settings";
+	if (active_page != profileId) {
+		add_search_bar();
+		active_page = profileId;
+		await go_to_page(profileId + "/" + profileId + ".html");
+		active_nav(active_page);
+		settingsGet();
+		fill_personal_info();
+		set_post_event();
+	}
 }
+to_profile();
 
 async function to_adress_book() {
   let adressId = "adress-book";
@@ -147,28 +150,38 @@ async function load_graph() {
 const savedId = document.getElementById("loading-brick");
 let loadCount = 0;
 function setLoading() {
-  if (loadCount < 4) {
-    console.log(1);
-    const li_el = document.createElement("li");
-    const div_text = document.createElement("div");
-    const icon_el = document.createElement("i");
-    const text = document.createTextNode("Сохранено");
-    icon_el.classList.add("fa-solid", "fa-check", "fa-xl");
-    icon_el.style.color = "#808000";
+	if (loadCount < 4) {
+		const li_el = document.createElement('li');
+		const div_text = document.createElement('div');
+		const icon_el = document.createElement('i');
+		const text = document.createTextNode("Сохранено");
+		icon_el.classList.add("fa-solid", "fa-check", "fa-xl");
+		icon_el.style.color = "#808000";
 
     div_text.appendChild(text);
     li_el.appendChild(div_text);
     li_el.appendChild(icon_el);
 
-    savedId.appendChild(li_el);
-    setTimeout((le_el) => {
-      savedId.firstElementChild.remove();
-      index--;
-    }, 3000);
-  }
+		div_text.appendChild(text);
+		li_el.appendChild(div_text);
+		li_el.appendChild(icon_el);
+		loadCount++;
+		savedId.appendChild(li_el);
+		setTimeout((le_el) => {
+			savedId.firstElementChild.remove();
+			loadCount--;
+		}, 3000);
+	}
 }
 
-// set settings
+function set_post_event() {
+	const buttons = document.querySelectorAll("._put_req");
+	buttons.forEach(el => {
+		el.addEventListener("click", () => setLoading());
+	});
+}
+
+// set settings 
 const generateHtml = (obj, title_text) => {
   let htmlText = "";
   let checkIt = "";
@@ -198,28 +211,11 @@ const generateHtml = (obj, title_text) => {
 };
 
 async function settingsGet() {
-  const title_text = [
-    "Имя",
-    "Фамилия",
-    "Почта",
-    "Должность",
-    "Отчество",
-    "Дата",
-    "Пол",
-    "Резюме",
-    "Телефон",
-    "Город",
-    "Дата приема на работу",
-    "Телеграм",
-    "Язык уведолении",
-    "О человеке",
-    "Граф",
-  ];
-  const user_sett = await get_fetched_text("personsDetail");
-  console.log(user_sett);
-  const user_entries = Object.entries(user_sett[0].settings);
-  console.log(settings);
-  generateHtml(user_entries, title_text);
+	const title_text = ["Имя", "Фамилия", "Почта", "Должность", "Отчество",
+		"Дата", "Пол", "Резюме", "Телефон", "Город", "Дата приема на работу", "Телеграм", "Язык уведолении", "О человеке", "Граф"];
+	const user_sett = await get_fetched_text("personsDetail");
+	const user_entries = Object.entries(user_sett[0].settings);
+	generateHtml(user_entries, title_text);
 }
 
 // posts settings
@@ -252,4 +248,39 @@ function close_account_profile() {
   change_body_grid("grid_open", "grid_close");
   document.getElementById("account_profile").style.display = "none";
   is_opened = false;
+}
+
+
+
+// search 
+document.getElementById("input_search").addEventListener('keydown', e => {
+	
+})
+
+async function doRequest() {
+	let data = {''};
+
+	let res = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+
+	if (res.ok) {
+
+		// let text = await res.text();
+		// return text;
+
+		let ret = await res.json();
+		return JSON.parse(ret.data);
+
+	} else {
+		return `HTTP error: ${res.status}`;
+	}
+}
+
+async function search_user() {
+
 }
