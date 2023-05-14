@@ -372,7 +372,7 @@ def search(session: Annotated[Session, Depends(get_session)], q: str):
     return [dict(zip(('name', 'column', 'object'), i)) for i in result]
 
 
-@app.get('/searchByDepartment/{q}', response_model=List[schemas.PersonDetail])
+@app.get('/searchByDepartment/{q}')
 def search(session: Annotated[Session, Depends(get_session)], q: str):
     departments = list([i[2] for i in models.search(models.Department, q, ('name',))])
     subdepartments = list([i[2] for i in models.search(models.Subdepartment, q, ('name',))])
