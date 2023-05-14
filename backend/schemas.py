@@ -140,6 +140,7 @@ class PersonBase(BaseModel):
     telegram: Optional[str]
     notification_lang: Optional[str]
     about: Optional[str]
+    image: Optional[str]
 
 
 class PersonCreate(PersonBase):

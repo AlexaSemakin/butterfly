@@ -83,7 +83,7 @@ def get_persons_graph(session: Annotated[Session, Depends(get_session)]):
         departments = get_person_departments(session, person.id)
         person.department = departments[0].name if len(departments) != 0 else 'Default'
         person.pid = bosses[0].id if len(bosses) != 0 else None
-        person.img = 'https://cdn.balkan.app/shared/' + str(randint(1, 18)) + '.jpg'
+        person.img = person_db.image
         persons_out.append(person.dict(exclude_none=True))
     return persons_out
 
@@ -121,6 +121,7 @@ def get_person(session: Annotated[Session, Depends(get_session)], person_email: 
 @app.post('/persons', response_model=schemas.Person)
 def create_person(session: Annotated[Session, Depends(get_session)], new_person: schemas.PersonCreate):
     new_person = models.Person(**new_person.dict(exclude_unset=True))
+    new_person.image = 'https://cdn.balkan.app/shared/' + str(randint(1, 18)) + '.jpg'
     session.add(new_person)
     session.commit()
     session.refresh(new_person)
