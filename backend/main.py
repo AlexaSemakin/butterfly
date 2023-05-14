@@ -401,3 +401,14 @@ def search(session: Annotated[Session, Depends(get_session)], q: str):
         persons += list([{'name': 'person', 'column': 'subdepartment', 'object': get_person_detail(session, i)}
                          for i in get_subdepartment_persons(session, s.id)])
     return persons
+
+
+@app.post('/personsAddByUsername/{username}')
+def persons_add_by_username(session: Annotated[Session, Depends(get_session)], username: str):
+    person = models.Person(username + '_telegram')
+    person.telegram = username
+    person.email = username + '_telegram@example.com'
+    session.add(person)
+    session.commit()
+    return person
+
