@@ -8,7 +8,6 @@ const paramsApi = {
   url: "http://185.246.67.74:8080/",
 };
 
-<<<<<<< HEAD
 async function get_fetched_text(responseUrl, query="") {
 	try {
 		if(query != "") {
@@ -18,14 +17,6 @@ async function get_fetched_text(responseUrl, query="") {
 		if (!response.ok) {
 			throw new Error(`Error! status: ${response.status}`);
 		}
-=======
-async function get_fetched_text(responseUrl) {
-  try {
-    const response = await fetch(paramsApi.url + responseUrl);
-    if (!response.ok) {
-      throw new Error(`Error! status: ${response.status}`);
-    }
->>>>>>> 9df052a403deed5ddf4d20072e92a91a84250f33
 
 		const user_data = await response.json();
 		return user_data;
