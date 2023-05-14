@@ -19,10 +19,8 @@ from backend import schemas
 import telebot
 from telebot import TeleBot
 
-
 app = FastAPI()
 bot = TeleBot(TELEGRAM_TOKEN)
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,11 +32,11 @@ app.add_middleware(
 
 
 def get_person_departments(session: Session, person_id: int):
-    result = session.query(models.Department)\
-        .join(models.Subdepartment, models.Department.subdepartments)\
-        .join(models.Project, models.Subdepartment.projects)\
-        .join(models.Person, models.Project.persons)\
-        .filter(models.Person.id == person_id)\
+    result = session.query(models.Department) \
+        .join(models.Subdepartment, models.Department.subdepartments) \
+        .join(models.Project, models.Subdepartment.projects) \
+        .join(models.Person, models.Project.persons) \
+        .filter(models.Person.id == person_id) \
         .all()
     return result
 
@@ -48,6 +46,25 @@ def get_person_subdepartments(session: Session, person_id: int):
         .join(models.Project, models.Subdepartment.projects) \
         .join(models.Person, models.Project.persons) \
         .filter(models.Person.id == person_id) \
+        .all()
+    return result
+
+
+def get_department_persons(session: Session, department_id: int):
+    result = session.query(models.Person) \
+        .join(models.Project, models.Person.projects) \
+        .join(models.Subdepartment, models.Project.subdepartments) \
+        .join(models.Department, models.Subdepartment.departments) \
+        .filter(models.Department.id == department_id) \
+        .all()
+    return result
+
+
+def get_subdepartment_persons(session: Session, subdepartment_id: int):
+    result = session.query(models.Person) \
+        .join(models.Project, models.Person.projects) \
+        .join(models.Subdepartment, models.Project.subdepartments) \
+        .filter(models.Subdepartment.id == subdepartment_id) \
         .all()
     return result
 
@@ -154,7 +171,8 @@ def delete_person(session: Annotated[Session, Depends(get_session)], person_id: 
 
 
 @app.post('/persons/settings/{person_email}')
-def update_person_settings(session: Annotated[Session, Depends(get_session)], person_email: str, settings: schemas.Settings):
+def update_person_settings(session: Annotated[Session, Depends(get_session)], person_email: str,
+                           settings: schemas.Settings):
     person = session.query(models.Person).filter(models.Person.email == person_email).first()
     person.settings = settings.dict()
     session.add(person)
@@ -212,7 +230,8 @@ def get_subdepartments(session: Annotated[Session, Depends(get_session)]):
 
 
 @app.post('/subdepartments', response_model=schemas.Subdepartment)
-def create_subdepartment(session: Annotated[Session, Depends(get_session)], new_subdepartment: schemas.SubdepartmentCreate):
+def create_subdepartment(session: Annotated[Session, Depends(get_session)],
+                         new_subdepartment: schemas.SubdepartmentCreate):
     new_subdepartment = models.Subdepartment(**new_subdepartment.dict(exclude_unset=True))
     session.add(new_subdepartment)
     session.commit()
@@ -276,7 +295,8 @@ def delete_person_project(session: Annotated[Session, Depends(get_session)], per
 
 
 @app.post('/repositoryProject')
-def create_repository_project(session: Annotated[Session, Depends(get_session)], new_repository_project: schemas.RepositoryProject):
+def create_repository_project(session: Annotated[Session, Depends(get_session)],
+                              new_repository_project: schemas.RepositoryProject):
     try:
         session.execute(models.repository_project.insert().values(**new_repository_project.dict()))
         session.commit()
@@ -286,15 +306,18 @@ def create_repository_project(session: Annotated[Session, Depends(get_session)],
 
 
 @app.post('/repositoryProject/delete')
-def delete_repository_project(session: Annotated[Session, Depends(get_session)], repository_project: schemas.RepositoryProject):
-    filters = [getattr(models.repository_project.c, name) == value for (name, value) in repository_project.dict().items()]
+def delete_repository_project(session: Annotated[Session, Depends(get_session)],
+                              repository_project: schemas.RepositoryProject):
+    filters = [getattr(models.repository_project.c, name) == value for (name, value) in
+               repository_project.dict().items()]
     session.execute(models.repository_project.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
 
 
 @app.post('/projectSubdepartment')
-def create_project_subdepartment(session: Annotated[Session, Depends(get_session)], new_project_subdepartment: schemas.ProjectSubdepartment):
+def create_project_subdepartment(session: Annotated[Session, Depends(get_session)],
+                                 new_project_subdepartment: schemas.ProjectSubdepartment):
     try:
         session.execute(models.project_subdepartment.insert().values(**new_project_subdepartment.dict()))
         session.commit()
@@ -304,15 +327,18 @@ def create_project_subdepartment(session: Annotated[Session, Depends(get_session
 
 
 @app.post('/projectSubdepartment/delete')
-def delete_project_subdepartment(session: Annotated[Session, Depends(get_session)], project_subdepartment: schemas.ProjectSubdepartment):
-    filters = [getattr(models.project_subdepartment.c, name) == value for (name, value) in project_subdepartment.dict().items()]
+def delete_project_subdepartment(session: Annotated[Session, Depends(get_session)],
+                                 project_subdepartment: schemas.ProjectSubdepartment):
+    filters = [getattr(models.project_subdepartment.c, name) == value for (name, value) in
+               project_subdepartment.dict().items()]
     session.execute(models.project_subdepartment.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
 
 
 @app.post('/subdepartmentDepartment')
-def create_subdepartment_department(session: Annotated[Session, Depends(get_session)], new_subdepartment_department: schemas.SubdepartmentDepartment):
+def create_subdepartment_department(session: Annotated[Session, Depends(get_session)],
+                                    new_subdepartment_department: schemas.SubdepartmentDepartment):
     try:
         session.execute(models.subdepartment_department.insert().values(**new_subdepartment_department.dict()))
         session.commit()
@@ -322,8 +348,10 @@ def create_subdepartment_department(session: Annotated[Session, Depends(get_sess
 
 
 @app.post('/subdepartmentDepartment/delete')
-def delete_subdepartment_department(session: Annotated[Session, Depends(get_session)], subdepartment_department: schemas.SubdepartmentDepartment):
-    filters = [getattr(models.subdepartment_department.c, name) == value for (name, value) in subdepartment_department.dict().items()]
+def delete_subdepartment_department(session: Annotated[Session, Depends(get_session)],
+                                    subdepartment_department: schemas.SubdepartmentDepartment):
+    filters = [getattr(models.subdepartment_department.c, name) == value for (name, value) in
+               subdepartment_department.dict().items()]
     session.execute(models.subdepartment_department.delete().filter(*filters))
     session.commit()
     return {'message': 'deleted'}
@@ -342,3 +370,17 @@ def search(session: Annotated[Session, Depends(get_session)], q: str):
 def search(session: Annotated[Session, Depends(get_session)], q: str):
     result = models.search(models.Person, q, ('name', 'surname', 'patronymic'))
     return [dict(zip(('name', 'column', 'object'), i)) for i in result]
+
+
+@app.get('/searchByDepartment/{q}', response_model=List[schemas.PersonDetail])
+def search(session: Annotated[Session, Depends(get_session)], q: str):
+    departments = list([i[2] for i in models.search(models.Department, q, ('name',))])
+    subdepartments = list([i[2] for i in models.search(models.Subdepartment, q, ('name',))])
+    persons = []
+    for d in departments:
+        persons += list([{'name': 'person', 'column': 'department', 'object': i}
+                         for i in get_department_persons(session, d.id)])
+    for s in subdepartments:
+        persons += list([{'name': 'person', 'column': 'subdepartment', 'object': i}
+                         for i in get_subdepartment_persons(session, s.id)])
+    return persons
