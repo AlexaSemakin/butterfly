@@ -5,6 +5,22 @@ const paramsApi = {
 	url: "http://185.246.67.74:8080/"
 }
 
+async function get_fetched_text(responseUrl) {
+	try {
+		const response = await fetch(paramsApi.url + responseUrl);
+		if (!response.ok) {
+			throw new Error(`Error! status: ${response.status}`);
+		}
+
+		const user_data = await response.json();
+		console.log(user_data);
+		return user_data;
+	}
+	catch (err) {
+		console.log(err);
+	}
+}
+
 function add_search_bar() {
 	if (show_search_bar == false) {
 		show_search_bar = true;
@@ -74,8 +90,8 @@ document.getElementById('chat').addEventListener("click", () => {
 
 async function go_to_page(url) {
 	if (url != undefined) {
-		const text = (await await fetch(url)).text();
-		document.getElementsByTagName("article")[0].innerHTML = await text;
+		const text = await (await fetch(url)).text();
+		document.getElementsByTagName("article")[0].innerHTML = text;
 	}
 }
 
@@ -150,11 +166,6 @@ function setLoading() {
 	}
 }
 
-
-
-
-
-
 // set settings 
 const generateHtml = (obj, title_text) => {
 	let htmlText = "";
@@ -187,8 +198,8 @@ const generateHtml = (obj, title_text) => {
 async function settingsGet() {
 	const title_text = ["Имя", "Фамилия", "Почта", "Должность", "Отчество",
 		"Дата", "Пол", "Резюме", "Телефон", "Город", "Дата приема на работу", "Телеграм", "Язык уведолении", "О человеке", "Граф"];
-	const userPersonalSettings = await (await fetch(paramsApi.url + "personsDetail")).text();
-	const user_sett = JSON.parse(userPersonalSettings);
+	const user_sett = await get_fetched_text("personsDetail");
+	console.log(user_sett)
 	const user_entries = Object.entries(user_sett[0].settings);
 	console.log(settings);
 	generateHtml(user_entries, title_text);
@@ -213,18 +224,18 @@ function change_body_grid(rm_class, add_class) {
 
 function open_account_profile() {
 
-		// TODO: parse json
+	// TODO: parse json
 
-		document.getElementById("account_profile").style.display = "block";
-		document.getElementById("account_profile").style.gridArea = "_user";
+	document.getElementById("account_profile").style.display = "block";
+	document.getElementById("account_profile").style.gridArea = "_user";
 
-		change_body_grid("grid_close", "grid_open");
-		is_opened = true;
+	change_body_grid("grid_close", "grid_open");
+	is_opened = true;
 }
 function close_account_profile() {
 
-		change_body_grid("grid_open", "grid_close");
-		document.getElementById("account_profile").style.display = "none";
-		is_opened = false;
+	change_body_grid("grid_open", "grid_close");
+	document.getElementById("account_profile").style.display = "none";
+	is_opened = false;
 
 }
