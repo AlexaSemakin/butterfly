@@ -410,5 +410,6 @@ def persons_add_by_username(session: Annotated[Session, Depends(get_session)], u
     person.email = username + '_telegram@example.com'
     session.add(person)
     session.commit()
-    return person
+    session.refresh(person)
+    return get_person_detail(session, person)
 
