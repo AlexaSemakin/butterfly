@@ -2,3 +2,4 @@ backend/config.py
 .idea
 backend/venv
 backend/__pycache__
+**cache**

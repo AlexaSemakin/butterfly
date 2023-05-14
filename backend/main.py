@@ -1,25 +1,29 @@
 import json
 from typing import Annotated, List
+from random import randint
 
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import insert
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from fastapi.middleware.cors import CORSMiddleware
 
 from backend.database import get_session
 from backend import models
 from backend import schemas
 
+
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["POST", "GET"],
-    allow_headers=["*"]
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 def get_person_departments(session: Session, person_id: int):
     result = session.query(models.Department)\
@@ -58,6 +62,21 @@ def get_persons(session: Annotated[Session, Depends(get_session)]):
         person.employee_email = employees[0].email if len(employees) != 0 else None
         persons_out.append(person)
 
+    return persons_out
+
+
+@app.get('/personsGraph')
+def get_persons_graph(session: Annotated[Session, Depends(get_session)]):
+    persons_db = session.query(models.Person)
+    persons_out = list()
+    for person_db in persons_db:
+        person = schemas.PersonGraph.from_orm(person_db)
+        bosses = person_db.bosses
+        departments = get_person_departments(session, person.id)
+        person.department = departments[0].name if len(departments) != 0 else 'Default'
+        person.pid = bosses[0].id if len(bosses) != 0 else None
+        person.img = 'https://cdn.balkan.app/shared/' + str(randint(1, 18)) + '.jpg'
+        persons_out.append(person.dict(exclude_none=True))
     return persons_out
 
 

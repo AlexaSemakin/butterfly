@@ -170,3 +170,16 @@ class Person(PersonBase):
 
     class Config:
         orm_mode = True
+
+
+class PersonGraph(BaseModel):
+    id: int
+    pid: Optional[int]
+    name: Optional[str]
+    post: Optional[str]
+    department: Optional[str]
+    city: Optional[str]
+    img: Optional[str]
+
+    class Config:
+        orm_mode = True
