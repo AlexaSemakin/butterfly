@@ -146,6 +146,10 @@ class PersonCreate(PersonBase):
     pass
 
 
+class PersonUpdate(PersonBase):
+    email: Optional[EmailStr]
+
+
 class PersonDetail(PersonBase):
     id: int
     projects: typing.List[Project]

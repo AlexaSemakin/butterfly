@@ -127,6 +127,17 @@ def create_person(session: Annotated[Session, Depends(get_session)], new_person:
     return new_person
 
 
+@app.post('/persons/update/{person_id}', response_model=schemas.Person)
+def update_person(session: Annotated[Session, Depends(get_session)], person_id: int, new_data: schemas.PersonUpdate):
+    person = session.query(models.Person).get(person_id)
+    for key, value in new_data.dict(exclude_none=True).items():
+        setattr(person, key, value)
+    session.add(person)
+    session.commit()
+    session.refresh(person)
+    return person
+
+
 @app.post('/persons/delete/{person_id}')
 def delete_person(session: Annotated[Session, Depends(get_session)], person_id: int):
     person = session.query(models.Person).get(person_id)
