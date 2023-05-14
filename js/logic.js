@@ -5,14 +5,11 @@ const search_bar = document.querySelector(".menu");
 to_profile();
 
 const paramsApi = {
-  url: "http://185.246.67.74:8080/",
+	url: "http://185.246.67.74:8080/",
 };
 
-async function get_fetched_text(responseUrl, query="") {
+async function get_fetched_text(responseUrl, query = "") {
 	try {
-		if(query != "") {
-			query = "/" + query;
-		}
 		const response = await fetch(paramsApi.url + responseUrl + query);
 		if (!response.ok) {
 			throw new Error(`Error! status: ${response.status}`);
@@ -27,31 +24,31 @@ async function get_fetched_text(responseUrl, query="") {
 }
 
 function add_search_bar() {
-  if (show_search_bar == false) {
-    show_search_bar = true;
-    search_bar.style.display = "block";
-  }
+	if (show_search_bar == false) {
+		show_search_bar = true;
+		search_bar.style.display = "block";
+	}
 }
 
 async function to_graph() {
-  let cardId = "graph";
-  if (active_page != cardId) {
-    add_search_bar();
-    active_page = cardId;
-    await go_to_page(cardId + "/" + cardId + ".html");
-    active_nav(active_page);
-    start(10);
-  }
+	let cardId = "graph";
+	if (active_page != cardId) {
+		add_search_bar();
+		active_page = cardId;
+		await go_to_page(cardId + "/" + cardId + ".html");
+		active_nav(active_page);
+		start(10);
+	}
 }
 async function to_project() {
-  let cardId = "graph-project-viev";
-  if (active_page != cardId) {
-    add_search_bar();
-    active_page = cardId;
-    await go_to_page("project-graph-view/project-graph-view.html");
-    active_nav(active_page);
-    drawProject();
-  }
+	let cardId = "graph-project-viev";
+	if (active_page != cardId) {
+		add_search_bar();
+		active_page = cardId;
+		await go_to_page("project-graph-view/project-graph-view.html");
+		active_nav(active_page);
+		drawProject();
+	}
 }
 
 async function to_profile() {
@@ -69,84 +66,85 @@ async function to_profile() {
 to_profile();
 
 async function to_adress_book() {
-  let adressId = "adress-book";
-  if (active_page != adressId) {
-    add_search_bar();
-    active_page = adressId;
-    await go_to_page(adressId + "/" + adressId + ".html");
-    active_nav(active_page);
-    add_notice();
-  }
+	let adressId = "adress-book";
+	if (active_page != adressId) {
+		add_search_bar();
+		active_page = adressId;
+		await go_to_page(adressId + "/" + adressId + ".html");
+		active_nav(active_page);
+		add_notice();
+		await add_notice("skldfjsldkfjs;ldkjfs;ldkfjsdfjk");
+	}
 }
 
 async function to_chat() {
-  let chatId = "chat";
-  if (active_page != chatId) {
-    search_bar.style.display = "none";
-    active_page = chatId;
-    await go_to_page(chatId + "/" + chatId + ".html");
-    active_nav(active_page);
-    close_account_profile();
-  }
+	let chatId = "chat";
+	if (active_page != chatId) {
+		search_bar.style.display = "none";
+		active_page = chatId;
+		await go_to_page(chatId + "/" + chatId + ".html");
+		active_nav(active_page);
+		close_account_profile();
+	}
 }
 
 document.getElementById("chat").addEventListener("click", () => {
-  if (show_search_bar === true) {
-    show_search_bar = false;
-    search_bar.style.display = "none";
-  }
+	if (show_search_bar === true) {
+		show_search_bar = false;
+		search_bar.style.display = "none";
+	}
 });
 
 async function go_to_page(url) {
-  if (url != undefined) {
-    const text = await (await fetch(url)).text();
-    document.getElementsByTagName("article")[0].innerHTML = text;
-  }
+	if (url != undefined) {
+		const text = await (await fetch(url)).text();
+		document.getElementsByTagName("article")[0].innerHTML = text;
+	}
 }
 
 function active_nav(elem_id) {
-  document
-    .getElementsByClassName("active_nav_button__image")[0]
-    .classList.remove("active_nav_button__image");
-  document.getElementById(elem_id).classList.add("active_nav_button__image");
+	document
+		.getElementsByClassName("active_nav_button__image")[0]
+		.classList.remove("active_nav_button__image");
+	document.getElementById(elem_id).classList.add("active_nav_button__image");
 }
 
 async function changeArticle(id) {
-  if (active_page != id) {
-    active_page = id;
-    await go_to_page(id + "/" + id + ".html");
-    active_nav(id);
-    // if (id == "graph") {
-    //   start(10);
-    // }
-  }
+	if (active_page != id) {
+		active_page = id;
+		await go_to_page(id + "/" + id + ".html");
+		active_nav(id);
+		// if (id == "graph") {
+		//   start(10);
+		// }
+	}
 }
 
 document.getElementById("info_button").addEventListener("click", () => {
-  open_account_profile();
+	open_account_profile();
 });
 
 function rand(a) {
-  return parseInt(Math.floor(Math.random() * a)) + 1;
+	return parseInt(Math.floor(Math.random() * a)) + 1;
 }
 
 function go() {
-  console.log("Node clicked: ");
+	console.log("Node clicked: ");
 }
 
 function getElementByXpath(path) {
-  return document.evaluate(
-    path,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue;
+	return document.evaluate(
+		path,
+		document,
+		null,
+		XPathResult.FIRST_ORDERED_NODE_TYPE,
+		null
+	).singleNodeValue;
 }
 async function load_graph() {
-  active_page = "graph";
-  await go_to_page("graph/graph.html");
-  active_nav(active_page);
+	active_page = "graph";
+	await go_to_page("graph/graph.html");
+	active_nav(active_page);
 }
 
 // _ draw loading
@@ -161,9 +159,9 @@ function setLoading() {
 		icon_el.classList.add("fa-solid", "fa-check", "fa-xl");
 		icon_el.style.color = "#808000";
 
-    div_text.appendChild(text);
-    li_el.appendChild(div_text);
-    li_el.appendChild(icon_el);
+		div_text.appendChild(text);
+		li_el.appendChild(div_text);
+		li_el.appendChild(icon_el);
 
 		div_text.appendChild(text);
 		li_el.appendChild(div_text);
@@ -186,14 +184,14 @@ function set_post_event() {
 
 // set settings 
 const generateHtml = (obj, title_text) => {
-  let htmlText = "";
-  let checkIt = "";
-  for (let index = 0; index < obj.length; index++) {
-    if (obj[index][1]) {
-      checkIt = "checked";
-    } else checkIt = "";
+	let htmlText = "";
+	let checkIt = "";
+	for (let index = 0; index < obj.length; index++) {
+		if (obj[index][1]) {
+			checkIt = "checked";
+		} else checkIt = "";
 
-    htmlText += `
+		htmlText += `
 			<div id="setting_${obj[index][0]}" class="switch_setting">
 			<div id="notice_${obj[index][0]}__text">
 				<div id="notice_${obj[index][0]}__title">${title_text[index]}</div>
@@ -209,8 +207,8 @@ const generateHtml = (obj, title_text) => {
 			</div>
 			</div>
 		`;
-  }
-  document.getElementById("noti_blocks").innerHTML = htmlText;
+	}
+	document.getElementById("noti_blocks").innerHTML = htmlText;
 };
 
 async function settingsGet() {
@@ -223,10 +221,10 @@ async function settingsGet() {
 
 // posts settings
 const postPersonalInfo = () => {
-  const info_el = document.querySelectorAll("._user_info");
-  info_el.forEach((el) => {
-    console.log(el.value);
-  });
+	const info_el = document.querySelectorAll("._user_info");
+	info_el.forEach((el) => {
+		console.log(el.value);
+	});
 };
 
 // get and set values of setting
@@ -234,34 +232,77 @@ const postPersonalInfo = () => {
 // _ change page
 let is_opened = false;
 function change_body_grid(rm_class, add_class) {
-  document.body.classList.remove(rm_class);
-  document.body.classList.add(add_class);
+	document.body.classList.remove(rm_class);
+	document.body.classList.add(add_class);
 }
 
 function open_account_profile() {
-  // TODO: parse json
+	// TODO: parse json
 
-  document.getElementById("account_profile").style.display = "block";
-  document.getElementById("account_profile").style.gridArea = "_user";
+	document.getElementById("account_profile").style.display = "block";
+	document.getElementById("account_profile").style.gridArea = "_user";
 
-  change_body_grid("grid_close", "grid_open");
-  is_opened = true;
+	change_body_grid("grid_close", "grid_open");
+	is_opened = true;
 }
 function close_account_profile() {
-  change_body_grid("grid_open", "grid_close");
-  document.getElementById("account_profile").style.display = "none";
-  is_opened = false;
+	change_body_grid("grid_open", "grid_close");
+	document.getElementById("account_profile").style.display = "none";
+	is_opened = false;
 }
 
 
 
 // search 
-document.getElementById("input_search").addEventListener('keydown', e => {
-	console.log(search_user());
+const search_bar_el = document.getElementById("input_search");
+search_bar_el.addEventListener('keydown', async e => {
+	
+	if (e.key === 'Enter') {
+		add_notice(search_bar_el.value);
+	}
 })
 
 
 
-async function search_user() {
-	return await get_fetched_text("search", "ksdfj");
+async function search_user(text) {
+	return await get_fetched_text("search/", text);
+}
+
+async function add_notice(text) {
+	let block = document.getElementById("notice__messages");
+	let obj = await search_user(text);
+	// console.log(obj, text);
+	let notices = "";
+	if(obj.length == 0)
+	{
+		notices += `<div>Не найдено ${text}</div>`
+		let aObj = await get_fetched_text("persons");
+		for (let i = 0; i < aObj.length; i++) {
+			notices += `
+			<div class="profile" onclick="open_account_profile()">
+				  <img src="${aObj[i].image}" alt="img" class="profile_photo_image">
+				  <div class="profile_info">
+					  <div class="profile_info_name">${aObj[i].name}</div>
+					  <div class="profile_info_post">${aObj[i].post}</div>
+					  <div class="profile_info_department">${aObj[i].department}</div>
+				  </div>
+			  </div>
+			`;
+		}
+	} else {
+		for (let i = 0; i < obj.length; i++) {
+			notices += `
+			<div class="profile" onclick="open_account_profile()">
+				  <img src="${obj[i].object.image}" alt="img" class="profile_photo_image">
+				  <div class="profile_info">
+					  <div class="profile_info_name">${obj[i].object.name} ${obj[i].object.surname}</div>
+					  <div class="profile_info_post">${obj[i].object.post}</div>
+					  <div class="profile_info_department">${obj[i].object.department}</div>
+				  </div>
+			  </div>
+			`;
+		  }
+	}
+	
+	block.innerHTML = notices;
 }
