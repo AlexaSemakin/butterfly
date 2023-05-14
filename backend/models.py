@@ -1,4 +1,5 @@
 import json
+import re
 from backend import database
 
 from sqlalchemy import Table, Column, Integer, MetaData, ForeignKey, String, Date, Boolean, Text, JSON, BigInteger
@@ -10,7 +11,7 @@ def search(model_class, substring, columns=tuple()):
     result = []
     for obj in s.query(model_class):
         for column in obj.__table__.columns.keys():
-            if substring in str(getattr(obj, column)) and (len(columns) == 0 or column in columns):
+            if re.search(substring, str(getattr(obj, column)), re.IGNORECASE) and (len(columns) == 0 or column in columns):
                 result.append((model_class.__tablename__, column, obj))
                 break
     return result
@@ -43,6 +44,11 @@ subdepartment_department = Table('subdepartment_department', Base.metadata,
                                         primary_key=True),
                                  Column('department_id', Integer, ForeignKey('department.id', ondelete='CASCADE'),
                                         primary_key=True))
+
+
+person_group = Table('person_group', Base.metadata,
+                     Column('person_id', Integer, ForeignKey('person.id', ondelete='CASCADE', primary_key=True)),
+                     Column('group_id', String(32), primary_key=True))
 
 
 def get_person_settings(self):
