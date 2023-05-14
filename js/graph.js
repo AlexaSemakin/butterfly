@@ -1,6 +1,6 @@
 // _ draw graph
 function start() {
-	changeArticle("graph");
+	// changeArticle("graph");
 	//JavaScript
 	OrgChart.templates.cool = Object.assign({}, OrgChart.templates.ana);
 	OrgChart.templates.cool.defs =

@@ -30,7 +30,7 @@ function fill_personal_info() {
 		<div id="person_data" class="person_input_flex">
 			<div class="person_data_">
 				<label for="_${fieldArr[i]}" class="">${fieldArrRus[i]}</label>
-				<input class="person_data_read" id="_${fieldArr[i]}" name="__${fieldArr[i]}" type="text" value="${obj[fieldArr[i]]}" autocomplete="off">
+				<input readonly class="person_data_read _switch" id="_${fieldArr[i]}" name="__${fieldArr[i]}" type="text" value="${obj[fieldArr[i]]}" autocomplete="off">
 			</div>
 		</div>
 	`
@@ -38,9 +38,27 @@ function fill_personal_info() {
 	parentEl.innerHTML = htmlText;
 }
 
-function write_mode() {
-
+let is_read = true;
+function swith_mode() {
+	const inputArr = document.querySelectorAll("._switch");
+	if(is_read) {
+		inputArr.forEach(el => {
+			el.classList.remove("person_data_read");
+			el.classList.add("person_data_write");
+			el.removeAttribute("readonly");
+			is_read = false;
+		});
+	} else {
+		inputArr.forEach(el => {
+			el.classList.remove("person_data_write");
+			el.classList.add("person_data_read");
+			el.setAttribute("readonly", true);
+			is_read = true;
+		});
+	}
 }
+
+
 
 
 
