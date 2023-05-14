@@ -120,6 +120,15 @@ def create_person(session: Annotated[Session, Depends(get_session)], new_person:
     return new_person
 
 
+@app.post('/persons/delete/{person_id}')
+def delete_person(session: Annotated[Session, Depends(get_session)], person_id: int):
+    person = session.query(models.Person).get(person_id)
+    telegram = person.telegram
+    session.delete(person)
+    session.commit()
+    # TODO: code...
+
+
 @app.post('/persons/settings/{person_email}')
 def update_person_settings(session: Annotated[Session, Depends(get_session)], person_email: str, settings: schemas.Settings):
     person = session.query(models.Person).filter(models.Person.email == person_email).first()
@@ -302,4 +311,10 @@ def search(session: Annotated[Session, Depends(get_session)], q: str):
     result = []
     for c in classes:
         result += models.search(c, q)
+    return [dict(zip(('name', 'column', 'object'), i)) for i in result]
+
+
+@app.get('/searchByName/{q}')
+def search(session: Annotated[Session, Depends(get_session)], q: str):
+    result = models.search(models.Person, q, ('name', 'surname', 'patronymic'))
     return [dict(zip(('name', 'column', 'object'), i)) for i in result]

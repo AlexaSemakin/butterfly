@@ -5,12 +5,12 @@ from sqlalchemy import Table, Column, Integer, MetaData, ForeignKey, String, Dat
 from sqlalchemy.orm import DeclarativeBase, relationship, backref
 
 
-def search(model_class, substring):
+def search(model_class, substring, columns=tuple()):
     s = database.SessionLocal()
     result = []
     for obj in s.query(model_class):
         for column in obj.__table__.columns.keys():
-            if substring in str(getattr(obj, column)):
+            if substring in str(getattr(obj, column)) and (len(columns) == 0 or column in columns):
                 result.append((model_class.__tablename__, column, obj))
                 break
     return result
